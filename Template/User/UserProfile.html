@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - GlamBook</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #D4AF37;
+            --secondary-color: #fff;
+            --sidebar-width: 250px;
+            --header-height: 60px;
+            --background-color: #121212;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            min-height: 100vh;
+            margin: 0;
+            color: var(--secondary-color);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: var(--sidebar-width);
+            background-color: #1a1a1a;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .sidebar-user-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .sidebar-username {
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .sidebar-email {
+            color: var(--secondary-color);
+            opacity: 0.7;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .menu-item {
+            padding: 15px 25px;
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        .menu-item.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: var(--sidebar-width);
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        /* Profile Header */
+        .profile-header {
+            background: #1a1a1a;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        /* Filter Section */
+        .filter-section {
+            background: #1a1a1a;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        select {
+            padding: 12px;
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 10px;
+            font-size: 1rem;
+            flex: 1;
+            transition: all 0.3s ease;
+            background: #242424;
+            color: var(--secondary-color);
+        }
+
+        select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .search-btn {
+            background: var(--primary-color);
+            color: #121212;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: #b99430;
+            transform: translateY(-2px);
+        }
+
+        /* Salon Grid */
+        .salon-card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .salon-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-color);
+        }
+
+        .salon-name {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .salon-address {
+            color: var(--secondary-color);
+            opacity: 0.7;
+        }
+
+        .salon-rating {
+            color: var(--primary-color);
+        }
+
+        /* Headings */
+        h1, h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        /* Loading Animation */
+        .loading {
+            background: #1a1a1a;
+            padding: 20px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            color: var(--secondary-color);
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .loading i {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .menu-toggle {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 45px;
+                height: 45px;
+                background: var(--primary-color);
+                border-radius: 12px;
+                box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+                border: none;
+                color: #121212;
+                font-size: 1.2rem;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            .menu-toggle:hover {
+                background: #b99430;
+            }
+
+            .filter-group {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+
+        /* Additional Dark Theme Elements */
+        .sidebar-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1a1a1a;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #b99430;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Toggle Button (visible on mobile) -->
+    <button class="menu-toggle" id="menuToggle">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img 
+            src="{{ userdata.Img.url }}" 
+                 alt="Profile Picture" 
+                 class="sidebar-user-pic">
+            <div class="sidebar-username">{{ userdata.Name }}</div>
+            <div class="sidebar-email">{{ userdata.Email }}</div>
+        </div>
+
+        <div class="sidebar-menu">
+            <a href="#" class="menu-item active">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="#" class="menu-item">
+                <i class="fas fa-history"></i>
+                Booking History
+            </a>
+            <a href="{% url 'ChangePassword' %}" class="menu-item">
+                <i class="fas fa-lock"></i>     
+                Change Password
+            </a>
+            <a href="{% url 'Logout' %}" class="menu-item logout-btn">
+                <i class="fas fa-sign-out-alt"></i>
+                Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        
+        
+        <div class="container">
+           
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <h2>Find Salons</h2>
+                <form action="" method="get">
+                    <div class="filter-group">
+                        <select name="city" id="city" required>
+                            <option value="">Select City</option>
+                            {% for city in cities %}
+                            <option value="{{city.id}}">{{city}}</option>
+                          {% endfor %}
+                        </select>
+
+                        <select name="area" id="area" required>
+                            <option value="">Select Area</option>
+                            {% for area in areas %}
+                            <option value="{{area.id}}">{{area}}</option>
+                          {% endfor %}
+                        </select>
+
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Salons Grid -->
+            <div class="salon-grid">
+                {% for salon in salons %}
+                <div class="salon-card">
+                    <img src="{{ salon.image.url }}" alt="{{ salon.name }}" class="salon-image">
+                    <div class="salon-info">
+                        <div class="salon-name">{{ salon.name }}</div>
+                        <div class="salon-address">
+                            <i class="fas fa-map-marker-alt"></i> {{ salon.area }}, {{ salon.city }}
+                        </div>
+                        <div class="salon-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <div class="loading">
+        <i class="fas fa-spinner fa-spin"></i> Loading...
+    </div>
+
+    <script>
+        // Sidebar Toggle Functionality
+        const menuToggle = document.getElementById('menuToggle');
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebarOverlay');
+        const mainContent = document.querySelector('.main-content');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            sidebarOverlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+        }
+
+        menuToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleSidebar();
+        });
+
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+
+        // Close sidebar when window is resized to desktop size
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768) {
+                sidebar.classList.remove('active');
+                sidebarOverlay.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // City/Area Filter Enhancement
+        const citySelect = document.getElementById('city');
+        const areaSelect = document.getElementById('area');
+        const loading = document.querySelector('.loading');
+
+        citySelect.addEventListener('change', async function() {
+            const cityId = this.value;
+            areaSelect.innerHTML = '<option value="">Select Area</option>';
+            
+            if(cityId) {
+                try {
+                    loading.classList.add('active');
+                    const response = await fetch(`/get-areas/${cityId}/`);
+                    const areas = await response.json();
+                    
+                    areas.forEach(area => {
+                        const option = document.createElement('option');
+                        option.value = area.id;
+                        option.textContent = area.name;
+                        areaSelect.appendChild(option);
+                    });
+                } catch (error) {
+                    console.error('Error fetching areas:', error);
+                } finally {
+                    loading.classList.remove('active');
+                }
+            }
+        });
+
+        // Prevent zoom on mobile devices
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{% load static %}
+{% include 'admin/header.html' %}
+
+
+<style>
+
+    table{
+        width: 100%;
+        color: #FFFFFF;
+        border-radius: 10px;
+    }
+    tr td{
+        font-size: 1.5rem;
+        padding: 1rem;
+        text-align: center;
+        text-transform: capitalize;
+    }
+    th{
+        font-size: 2rem;
+    }
+    
+    a{
+        text-decoration: none;
+        color: #D4AF37;
+    }
+
+</style>
+
+
+{% block content %}
+<table  >
+    <tr>
+        <th >Service Id</th>
+        <th>Service Name</th>
+        <th><a href="{% url 'ServiceTrans' %}">Add New</a></th>
+    </tr>
+    
+    {% for list in ServiceList  %}
+        <tr>
+            <td>{{list.id}}</td>
+            <td>{{list.ServiceName}}</td>
+            <td><a href="{% url 'ServiceTrans' list.id %}">Update</a></td>
+            
+        </tr>
+    
+    {% endfor %}
+    
+</table>
+
+{% endblock content %}

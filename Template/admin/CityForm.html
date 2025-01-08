@@ -1,0 +1,78 @@
+{% load static %}
+{% include 'admin/header.html' %}
+    
+<!-- Add this style section in the head -->
+<style>
+
+    /* Form styles */
+    form {
+        position: relative;
+        z-index: 10;
+        background-color: #121212;
+        padding: 2rem;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        color: var( --secondary-color);
+
+    }
+    .form-title{
+        font-size: 2rem;
+    }
+    .form-group{
+        width: 100%;
+    }
+    input{
+        width: 100%;
+        font-size: 1.5rem;
+        border-radius: 5px;
+        padding: 0.5rem;
+    }
+
+
+    input[type="submit"] {
+        background-color: #D4AF37;
+        color: white;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #C5A028;
+    }
+    form a{
+        color: #D4AF37;
+        text-decoration: none;
+    }
+</style>
+
+<form method="post" action="" autocomplete="off" >
+    {% csrf_token %}
+    <h2 class="form-title">Add City</h2>
+    <div class="form-group">
+       
+        {{form.CityName}}
+    </div>
+    <input type="submit" value="Save" name="submit">
+    <a href="{% url 'CityList' %}">Show List of Cities</a>
+</form>
+
+
+<!-- Add JavaScript for mobile menu toggle -->
+<script>
+    document.querySelector('.menu-toggle').addEventListener('click', function() {
+        document.querySelector('.sidebar').classList.toggle('active');
+    });
+</script>
+</body>
+</html>

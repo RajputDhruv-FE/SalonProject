@@ -1,0 +1,77 @@
+{% load static %}
+
+{% include 'admin/header.html' %}
+<style>
+    .form-container {
+        display: flex;
+        justify-content: center;
+        padding: 2rem;
+    }
+
+    form {
+        background-color:transparent;
+        padding: 2rem;
+        border-radius: 10px;
+        width: 100%;
+        max-width: 400px;
+        color: var( --secondary-color);
+    }
+
+    .form-title {
+        text-align: center;
+        margin-bottom: 2rem;
+        font-size: 1.8rem;
+    }
+
+    input {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+        font-size: 1rem;
+        text-transform: capitalize;
+        padding: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    input[type="submit"] {
+        background-color: #D4AF37;
+        color: white;
+        padding: 12px;
+        border: none;
+        cursor: pointer;
+        margin-top: 1rem;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #C5A028;
+    }
+
+    label {
+        display: none;
+    }
+    .errorlist{
+        display: none;
+    }
+</style>
+<div class="form-container">
+    <form action="" method="post" autocomplete="off">
+        <h1>Add Services</h1>
+        {% csrf_token %}
+        {{form}}
+        <input type="submit" value="Save" name="submit">
+        <a href="{% url 'ServiceList' %}">Show the lsit of services</a>
+    </form>
+</div>
+    
+    
+    <script>
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+    </body>
+    </html>
+    
