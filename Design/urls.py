@@ -33,6 +33,9 @@ urlpatterns = [
     # owner urls
     path("SalonOwnerDashboard",views.SalonOwnerDashboard, name="SalonOwnerDashboard"),
     path("UpdateSalonStatus/<int:id>",views.UpdateSalonStatus, name="UpdateSalonStatus"),
+    path("OwnerProfile",views.OwnerProfile, name="OwnerProfile"),
+    path("SalonTrans",views.SalonTrans, name="SalonTrans"),
+
 
 
 

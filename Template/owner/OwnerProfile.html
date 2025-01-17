@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owner Profile - GlamBook</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
+    <link rel="stylesheet" href="{% static 'assets/css/OwnerProfile.css' %}">
+    
+</head>
+<body>
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <img src="{{ owner.profile_image.url }}" alt="Profile Picture" class="profile-image">
+                
+                <div class="profile-info">
+                    <h1>{{ owner.name }}</h1>
+                    <div class="location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ owner.location }}
+                    </div>
+                    <div class="rating">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star-half-alt"></i>
+                        <span>4.5</span>
+                    </div>
+                    <div class="stats">
+                        <div class="stat-item">
+                            <div class="stat-value">{{ owner.total_bookings }}</div>
+                            <div class="stat-label">Bookings</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ owner.total_services }}</div>
+                            <div class="stat-label">Services</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">{{ owner.years_experience }}</div>
+                            <div class="stat-label">Years Experience</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary">Edit Profile</button>
+                    <button class="btn btn-outline">Share Profile</button>
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-card">
+                    <h3>Personal Information</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Email</span>
+                        <span class="detail-value">{{ owner.email }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Phone</span>
+                        <span class="detail-value">{{ owner.phone }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Joined</span>
+                        <span class="detail-value">{{ owner.date_joined|date:"M Y" }}</span>
+                    </div>
+                </div>
+
+                <div class="detail-card">
+                    <h3>Salon Details</h3>
+                    <div class="detail-item">
+                        <span class="detail-label">Salon Name</span>
+                        <span class="detail-value">{{ owner.salon_name }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Address</span>
+                        <span class="detail-value">{{ owner.salon_address }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">Business Hours</span>
+                        <span class="detail-value">{{ owner.business_hours }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

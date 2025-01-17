@@ -1,12 +1,15 @@
 from django.shortcuts import render,redirect
-from . forms import CityForm,AreaForm,UserForm,ServiceForm
-from . models import CityMst,AreaMst,UserMst,ServiceMst
+from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst
 from django.db.models import Q,F
 
 def IndexView(request):
     content  = CityMst.objects.values_list('CityName',flat=True)
     cityNames = [city.capitalize() for city in content]
-    data = {"cities":cityNames}
+    salons = SalonMst.objects.all()
+    for i in salons:
+        print(i.Name)
+    data = {"cities":cityNames,"salons":salons}
     return render(request, 'index.html',data)
 # Create your views here.
 
@@ -26,8 +29,8 @@ def Login(request):
             request.session['user'] = email
             flag = 1
             return redirect('UserProfile')
-        elif flag == 0 and usertype == 'Owner' and (UserMst.objects.filter(Q(Email = email)& Q(Password = password)).exists()): 
-            request.session['user'] = email
+        elif flag == 0 and usertype == 'Owner' and (UserMst.objects.filter(Q(Email = email)& Q(Password = password)& Q(Status="verified")).exists()): 
+            request.session['owner'] = email
             flag = 1
             return redirect('SalonOwnerDashboard')
     else:
@@ -44,7 +47,6 @@ def AdminDashboard(request):
     
 def UpdateSalonStatus(request,id):
     status = request.POST['status']
-    # print(status)
     salondata = UserMst.objects.get(id = id)
     salondata.Status = status
     salondata.save()
@@ -56,14 +58,15 @@ def UserProfile(request):
         areaNames  = AreaMst.objects.values_list('AreaName',flat=True)
         email = request.session.get("user")
         userdata=UserMst.objects.get(Email=email)
-        print(userdata)
-        
         data = {"cities":cityNames,"areas":areaNames,"userdata":userdata}
         return render(request,'User/UserProfile.html',data)
     else:
         return redirect('Login')
 def SalonOwnerDashboard(request):
-    return render(request,'owner/SalonOwnerDashboard.html')
+    if request.session.has_key('owner'):
+        return render(request,'owner/SalonOwnerDashboard.html')
+    else:
+         return redirect('Login')
     
 def Logout(request):
     if 'admin' in request.session:
@@ -71,6 +74,9 @@ def Logout(request):
         return redirect('IndexView')
     if 'user' in request.session:
         del request.session['user']
+        return redirect('IndexView')
+    if 'owner' in request.session:
+        del request.session['owner']
         return redirect('IndexView')
     
 def CityTrans(request,id=0):
@@ -106,7 +112,7 @@ def AreaTrans(request,id=0):
             aid = AreaMst.objects.get(pk= id)
             form = AreaForm(instance=aid)
         return render(request, 'admin/AreaForm.html', {'form':form})
-    
+
 
     # to update the Area name
     else:
@@ -164,7 +170,11 @@ def ServiceList(request):
     return render(request,'admin/ServiceList.html',content)
 
 def ChangePassword(request):
-    return render(request,'ChangePassword.html')
+
+    if request.session.has_key( 'user'):
+        return render(request,'User/ChangePassword.html')
+    else:
+        return redirect("Login")
 
 #this code for change password
 
@@ -223,3 +233,19 @@ def xxx(request):
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
         server.login(sender_email, sender_password)
         server.sendmail(sender_email, recipient_email, html_message.as_string())
+
+def OwnerProfile(request):
+    if request.session.has_key('owner'):
+        return render(request,'owner/OwnerProfile.html')
+
+def SalonTrans(request):
+    form = SalonForm(request.POST, request.FILES)
+    if form.is_valid():
+        email = request.session.get("owner")
+        member = UserMst.objects.get(Email=email)  # Get the UserMst instance
+        instance = form.save(commit=False)  # Create an instance without saving to DB
+        instance.Owner = member  # Assign the UserMst instance, not the id
+        print(instance.Owner)
+
+        instance.save()  # Save the instance to the database
+    return render(request, 'owner/SalonForm.html', {'form': form})

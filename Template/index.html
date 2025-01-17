@@ -23,303 +23,10 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-
-    <style>
-      :root {
-        --primary-color: #ffd700; /* Gold */
-        --primary-hover: #daa520; /* Darker gold for hover states */
-        --secondary-color: #1a1a1a; /* Rich black */
-        --background-dark: #121212; /* Dark background */
-        --background-light: #1e1e1e; /* Slightly lighter black */
-        --text-light: #ffffff; /* White text */
-        --text-muted: #b3b3b3; /* Muted text */
-        --border-color: #2a2a2a; /* Dark borders */
-        --success-color: #4caf50; /* Keep success color */
-        --error-color: #dc3545;
-      }
-
-      body {
-        font-family: "Poppins", sans-serif;
-        background-color: var(--background-dark);
-        color: var(--text-light);
-      }
+    <link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+    
+    
       
-
-      /* Navbar Styles */
-      .navbar {
-        background-color: white;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        padding: 15px 0;
-      }
-
-      .navbar-brand {
-        font-weight: 700;
-        color: var(--primary-color);
-        font-size: 24px;
-      }
-      .navbar .nav-item .nav-link{
-        color: #121212;
-        font-weight: 600;
-      }
-      /* Hero Section */
-      .hero {
-        position: relative;
-        height: 600px;
-        overflow: hidden;
-      }
-
-      .hero-slide {
-        height: 600px;
-        background-size: cover;
-        background-position: center;
-        position: relative;
-      }
-
-      .hero-slide::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5); /* Darker overlay */
-      }
-
-      .hero-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        z-index: 2;
-        text-align: center;
-      }
-
-      .carousel-control-prev,
-      .carousel-control-next {
-        z-index: 3;
-      }
-
-      /* Remove the old hero background styles */
-      .hero {
-        background: none;
-      }
-
-      .carousel-item {
-        height: 600px; /* Add this to ensure the carousel item takes full height */
-      }
-
-      .hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 1;
-      }
-
-      .hero-content {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%;
-        z-index: 2;
-        text-align: center;
-      }
-
-      #heroCarousel {
-        height: 100%;
-      }
-
-      .carousel-inner {
-        height: 100%;
-      }
-
-      .carousel-item {
-        height: 100%;
-      }
-
-      .carousel-item img {
-        height: 600px;
-        object-fit: cover;
-        width: 100%;
-      }
-
-      .search-box {
-        background: white;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        margin-top: 30px;
-      }
-
-      .search-box select,
-      .search-box input {
-        margin: 10px 0;
-        height: 50px;
-        border: 1px solid #ddd;
-      }
-
-      /* Services Section */
-      .service-card {
-        background: white;
-        padding: 20px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-        transition: transform 0.3s ease;
-      }
-
-      .service-card:hover {
-        transform: translateY(-5px);
-      }
-
-      .service-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-        border-radius: 5px;
-        margin-bottom: 15px;
-      }
-
-      /* Process Section */
-      .process-section {
-        background-color: var(--light-gray);
-      }
-
-      .process-box {
-        padding: 30px;
-        background: white;
-        border-radius: 10px;
-        margin: 15px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        text-align: center;
-      }
-
-      .process-box i {
-        color: var(--primary-color);
-        margin-bottom: 15px;
-      }
-
-      /* Salon Cards */
-      .salon-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-      }
-
-      .salon-card img {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-      }
-
-      .salon-info {
-        padding: 20px;
-      }
-
-      .rating {
-        color: #ffc107;
-        margin: 10px 0;
-      }
-
-      /* Buttons */
-      .btn-primary {
-        background-color: var(--primary-color);
-        color: var(--secondary-color);
-        border: none;
-        padding: 12px 30px;
-        border-radius: 5px;
-        font-weight: 500;
-      }
-
-      .btn-primary:hover {
-        background-color: var(--primary-hover);
-      }
-      .salon-listings {
-        padding: 80px 0;
-        background-color: var(--light-gray);
-      }
-
-      .nav-pills .nav-link {
-        color: var(--secondary-color);
-        background-color: var(--text-muted);
-        border-radius: 25px;
-        padding: 10px 30px;
-        margin: 0 5px;
-      }
-      
-
-      .nav-pills .nav-link.active {
-        background-color: var(--primary-color);
-      }
-      
-
-      .salon-card {
-        background: white;
-        border-radius: 10px;
-        overflow: hidden;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-      }
-
-      .salon-card:hover {
-        transform: translateY(-5px);
-      }
-
-      .salon-info {
-        padding: 20px;
-      }
-
-      .salon-details {
-        display: flex;
-        justify-content: space-between;
-        margin: 10px 0;
-        font-size: 0.9rem;
-        color: #666;
-      }
-
-      .salon-services {
-        margin: 15px 0;
-      }
-
-      .salon-services .badge {
-        margin-right: 5px;
-        padding: 8px 15px;
-        font-weight: 500;
-      }
-
-      .rating {
-        color: #ffc107;
-        margin: 10px 0;
-      }
-
-      .rating span {
-        color: #666;
-        margin-left: 5px;
-      }
-
-      /* Footer */
-      footer {
-        background-color: var(--secondary-color);
-        color: white;
-        padding: 50px 0 20px;
-      }
-
-      .footer-links a {
-        color: white;
-        text-decoration: none;
-        margin: 0 10px;
-      }
-      .process-box p,h4{
-        color: var(--secondary-color);
-      }
-    </style>
   </head>
   <body>
     <!-- Navbar -->
@@ -355,20 +62,42 @@
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a" class="d-block w-100" alt="Salon Image 1">
+            <img
+              src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
+              class="d-block w-100"
+              alt="Salon Image 1"
+            />
           </div>
           <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1562322140-8baeececf3df" class="d-block w-100" alt="Salon Image 2">
+            <img
+              src="https://images.unsplash.com/photo-1562322140-8baeececf3df"
+              class="d-block w-100"
+              alt="Salon Image 2"
+            />
           </div>
           <div class="carousel-item">
-            <img src="https://images.unsplash.com/photo-1621605815971-fbc98d665033" class="d-block w-100" alt="Salon Image 3">
+            <img
+              src="https://images.unsplash.com/photo-1621605815971-fbc98d665033"
+              class="d-block w-100"
+              alt="Salon Image 3"
+            />
           </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+        <button
+          class="carousel-control-prev"
+          type="button"
+          data-bs-target="#heroCarousel"
+          data-bs-slide="prev"
+        >
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+        <button
+          class="carousel-control-next"
+          type="button"
+          data-bs-target="#heroCarousel"
+          data-bs-slide="next"
+        >
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
@@ -376,28 +105,34 @@
       <div class="hero-content">
         <div class="container">
           <h1 class="display-4 fw-bold">Find and Book Your Perfect Salon</h1>
-          <p class="lead">Discover top-rated salons and book your appointment instantly</p>
+          <p class="lead">
+            Discover top-rated salons and book your appointment instantly
+          </p>
           <div class="search-box">
             <div class="row">
               <div class="col-md-4">
-                <select class="form-control">
-                 
+                <select class="form-control" id="citySelect">
+                  <option value="">Select City</option>
                   {% for city in cities %}
-                    <option>{{city}}</option>
+                  <option>{{city}}</option>
                   {% endfor %}
                 </select>
               </div>
               <div class="col-md-4">
-                <select class="form-control">
-                  <option>Select Service</option>
-                  <option>Haircut</option>
-                  <option>Hair Coloring</option>
-                  <option>Spa</option>
-                  <option>Makeup</option>
+                <select class="form-control" id="areaSelect">
+                  <option value="">Select Area</option>
+                  <option>Waghodiya</option>
+                  <option>Manjalpur</option>
+                  <option>Harni</option>
+                  <option>Sama</option>
+                  <option>Akota</option>
                 </select>
               </div>
-              <div class="col-md-4">
-                <button class="btn btn-primary w-100">Search Salons</button>
+              <div class="col-md-4 d-flex gap-2">
+                <button class="btn btn-primary flex-grow-1">Search Salons</button>
+                <button class="btn btn-outline-primary" onclick="getCurrentLocation()">
+                  <i class="fas fa-location-arrow"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -412,129 +147,219 @@
           <p>Explore top-rated salons across different cities</p>
         </div>
 
-        <!-- City Tabs -->
-        <ul
-          class="nav nav-pills mb-4 justify-content-center"
-          id="cityTabs"
-          role="tablist"
-        >
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link active"
-              data-bs-toggle="pill"
-              data-bs-target="#newYork"
-            >
-              New York
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              data-bs-toggle="pill"
-              data-bs-target="#losAngeles"
-            >
-              Los Angeles
-            </button>
-          </li>
-          <li class="nav-item" role="presentation">
-            <button
-              class="nav-link"
-              data-bs-toggle="pill"
-              data-bs-target="#chicago"
-            >
-              Chicago
-            </button>
-          </li>
-        </ul>
-
-        <!-- Salon Listings by City -->
-        <div class="tab-content" id="cityTabContent">
-          <!-- New York Salons -->
-          <div class="tab-pane fade show active" id="newYork">
-            <div class="row">
-              <div class="col-md-4 mb-4">
-                <div class="salon-card">
-                  <img
-                    src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
-                    alt="Glamour Studio"
-                  />
-                  <div class="salon-info">
-                    <h4>Glamour Studio</h4>
-                    <p class="location">
-                      <i class="fas fa-map-marker-alt"></i> Manhattan, NY
-                    </p>
-                    <div class="salon-details">
-                      <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
-                      <span><i class="fas fa-phone"></i> (212) 555-0123</span>
-                    </div>
-                    <div class="rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star-half-alt"></i>
-                      <span>(245 reviews)</span>
-                    </div>
-                    <div class="salon-services">
-                      <span class="badge bg-light text-dark">Haircut</span>
-                      <span class="badge bg-light text-dark">Coloring</span>
-                      <span class="badge bg-light text-dark">Spa</span>
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3">
-                      Book Appointment
-                    </button>
-                  </div>
+        <!-- Salon Listings -->
+        <div class="row">
+          <!-- Salon Card 1 -->
+          <!-- <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
+                alt="Glamour Studio"
+              />
+              <div class="salon-info">
+                <h4>Glamour Studio</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
+                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
                 </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span>(245 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Haircut</span>
+                  <span class="badge bg-light text-dark">Coloring</span>
+                  <span class="badge bg-light text-dark">Spa</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
               </div>
-              <!-- Add more New York salons -->
+            </div>
+          </div> -->
+          <!-- <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="https://plus.unsplash.com/premium_photo-1661404164814-9d3c137097aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXR5fGVufDB8fDB8fHww"
+                alt="Glamour Studio"
+              />
+              <div class="salon-info">
+                <h4>Glamour Studio</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
+                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
+                </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span>(245 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Haircut</span>
+                  <span class="badge bg-light text-dark">Coloring</span>
+                  <span class="badge bg-light text-dark">Spa</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="https://media.istockphoto.com/id/1392177439/photo/woman-at-hairdresser.webp?a=1&b=1&s=612x612&w=0&k=20&c=Jh-ZQkMekMUhhXCU1nA5BEBsZfNaPOme3mN0mdXIxEI="
+                alt="Glamour Studio"
+              />
+              <div class="salon-info">
+                <h4>Glamour Studio</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
+                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
+                </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                  <span>(245 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Haircut</span>
+                  <span class="badge bg-light text-dark">Coloring</span>
+                  <span class="badge bg-light text-dark">Spa</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
+              </div>
+            </div>
+          </div> -->
+
+          <!-- Salon Card 2  -->
+          <!-- <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.webp?a=1&b=1&s=612x612&w=0&k=20&c=tlx34JXu-XOOUzvSmQbH0Ef4288Tb4wwOHWHP8KYjxI="
+                alt="Beauty Lounge LA"
+              />
+              <div class="salon-info">
+                <h4>Beauty Lounge LA</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
+                  <span><i class="fas fa-phone"></i> (310) 555-0123</span>
+                </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span>(189 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Makeup</span>
+                  <span class="badge bg-light text-dark">Facial</span>
+                  <span class="badge bg-light text-dark">Massage</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
+              </div>
+            </div>
+          </div> -->
+          <!-- <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="https://images.unsplash.com/photo-1463430144406-394c977562d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aGFpciUyMHN0eWxlfGVufDB8fDB8fHww"
+                alt="Beauty Lounge LA"
+              />
+              <div class="salon-info">
+                <h4>Beauty Lounge LA</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
+                  <span><i class="fas fa-phone"></i> (310) 555-0123</span>
+                </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span>(189 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Makeup</span>
+                  <span class="badge bg-light text-dark">Facial</span>
+                  <span class="badge bg-light text-dark">Massage</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
+              </div>
+            </div>
+          </div> -->
+
+          {% for salon in salons %}
+          <div class="col-md-4 mb-4">
+            <div class="salon-card">
+              <img
+                src="{{salon.Img.url}}" 
+                alt="Beauty Lounge LA"
+              />
+              <div class="salon-info">
+                <h4>{{salon.Name}}</h4>
+                <p class="location">
+                  <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
+                </p>
+                <div class="salon-details">
+                  <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
+                  <span><i class="fas fa-phone"></i> {{salon.Owner.PhoneNumber}}</span>
+                </div>
+                <div class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <span>(189 reviews)</span>
+                </div>
+                <div class="salon-services">
+                  <span class="badge bg-light text-dark">Makeup</span>
+                  <span class="badge bg-light text-dark">Facial</span>
+                  <span class="badge bg-light text-dark">Massage</span>
+                </div>
+                <button class="btn btn-primary w-100 mt-3">
+                  Book Appointment
+                </button>
+              </div>
             </div>
           </div>
+          {% endfor %}
 
-          <!-- Los Angeles Salons -->
-          <div class="tab-pane fade" id="losAngeles">
-            <div class="row">
-              <div class="col-md-4 mb-4">
-                <div class="salon-card">
-                  <img
-                    src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
-                    alt="Beauty Lounge LA"
-                  />
-                  <div class="salon-info">
-                    <h4>Beauty Lounge LA</h4>
-                    <p class="location">
-                      <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
-                    </p>
-                    <div class="salon-details">
-                      <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
-                      <span><i class="fas fa-phone"></i> (310) 555-0123</span>
-                    </div>
-                    <div class="rating">
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <i class="fas fa-star"></i>
-                      <span>(189 reviews)</span>
-                    </div>
-                    <div class="salon-services">
-                      <span class="badge bg-light text-dark">Makeup</span>
-                      <span class="badge bg-light text-dark">Facial</span>
-                      <span class="badge bg-light text-dark">Massage</span>
-                    </div>
-                    <button class="btn btn-primary w-100 mt-3">
-                      Book Appointment
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <!-- Add more Los Angeles salons -->
-            </div>
-          </div>
-
-          <!-- Chicago Salons -->
-          <div class="tab-pane fade" id="chicago">
-            <!-- Similar structure for Chicago salons -->
-          </div>
         </div>
       </div>
     </section>
@@ -579,7 +404,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6 text-center text-md-start">
-            <h3>GlamBook</h3>
+            <h3 class="navbar-brand">Hair Harmony</h3>
             <p>Your ultimate salon booking platform</p>
           </div>
           <div class="col-md-6 text-center text-md-end">
@@ -600,5 +425,48 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+   async function getCurrentLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      async function (position) { 
+        const latitude = position.coords.latitude;
+        const longitude = position.coords.longitude;
+        console.log("Latitude:", latitude);
+        console.log("Longitude:", longitude);
+
+        // Use reverse geocoding to get city and area
+        const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          console.log(data.address)
+
+          const city = data.address.state_district || data.address.town || data.address.village;
+          const state = data.address.state || data.address.town || data.address.village;
+          const area = data.address.neighbourhood || data.address.suburb || data.address.road;
+
+          console.log("City:", city);
+          console.log("Area:", area);
+          console.log("State:", state);
+          document.getElementById('citySelect').innerHTML=`<option value="${city}">${city}</option>`
+          document.getElementById('areaSelect').innerHTML=`<option value="${area}">${area}</option>`
+
+        } catch (error) {
+          console.error("Error fetching location data:", error);
+        }
+      },
+      function (error) {
+        console.error("Error getting location:", error);
+        alert("Unable to get your location. Please enable location services and try again.");
+      }
+    );
+  } else {
+    alert("Geolocation is not supported by your browser");
+  }
+}
+
+    </script>
   </body>
 </html>
