@@ -1,188 +1,24 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Salon Booking</title>
-    <style>
-      body {
-        position: relative;
-        font-family: "Arial", sans-serif;
-        height: 100%;
-        margin: 0;
-        padding: 15px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+   <link rel="stylesheet" href="{% static 'assets/css/UserForm.css' %}">
+   <link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32"  />
+
+   <script>
+    // On page load, display the alert box if a message exists
+    window.onload = function() {
+      const serverMessage = "{{ message|escapejs }}"; // Safely render the message from Django
+      if (serverMessage) {
+        alert(serverMessage); // Display the message in an alert box
       }
-
-      .hero-img {
-        position: fixed;
-        z-index: -10;
-        height: 100%;
-        width: 100%;
-        object-fit: cover;
-        object-position: center;
-        top: 0;
-        left: 0;
-      }
-
-      .over-lay {
-        position: fixed;
-        z-index: 1;
-        background-color: rgba(0, 0, 0, 0.5);
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-      }
-
-      form {
-        position: relative;
-        z-index: 10;
-        background-color: white;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        width: 90%;
-        max-width: 400px;
-        margin: auto;
-      }
-
-      .form-title {
-        text-align: center;
-        color: #333;
-        margin-bottom: 2rem;
-        font-size: 1.8rem;
-      }
-
-      input,
-      select,
-      textarea {
-        width: 100%;
-        padding: 10px;
-        margin: 8px 0;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        box-sizing: border-box;
-        font-size: 1rem;
-      }
-
-      input[type="submit"] {
-        background-color: #D4AF37;
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        margin-top: 1rem;
-      }
-
-      input[type="submit"]:hover {
-        background-color: #ffd700;
-      }
-
-      label {
-        display: block;
-        margin-bottom: 5px;
-        color: #555;
-        font-weight: 500;
-      }
-
-      /* Large screens (desktop) */
-      @media screen and (min-width: 1024px) {
-        form {
-          padding: 2.5rem;
-          max-width: 450px;
-        }
-        
-        .form-title {
-          font-size: 2rem;
-        }
-      }
-
-      /* Medium screens (tablet) */
-      @media screen and (max-width: 768px) {
-        form {
-          width: 85%;
-          padding: 1.5rem;
-        }
-        
-        .form-title {
-          font-size: 1.6rem;
-          margin-bottom: 1.5rem;
-        }
-      }
-
-      /* Small screens (mobile) */
-      @media screen and (max-width: 480px) {
-        body {
-          padding: 10px;
-        }
-
-        form {
-          width: 95%;
-          padding: 1rem;
-        }
-
-        .form-title {
-          font-size: 1.4rem;
-          margin-bottom: 1rem;
-        }
-
-        input,
-        select,
-        textarea {
-          padding: 8px;
-          margin: 6px 0;
-          font-size: 0.9rem;
-        }
-
-        input[type="submit"] {
-          padding: 10px;
-          font-size: 1rem;
-        }
-
-        label {
-          font-size: 0.9rem;
-        }
-      }
-
-      /* Very small screens */
-      @media screen and (max-width: 320px) {
-        form {
-          padding: 0.8rem;
-        }
-
-        .form-title {
-          font-size: 1.2rem;
-        }
-
-        input,
-        select,
-        textarea {
-          padding: 6px;
-          margin: 4px 0;
-        }
-      }
-
-      /* Handle shorter screens */
-      @media screen and (max-height: 600px) {
-        body {
-          min-height: auto;
-          padding: 20px 10px;
-        }
-        
-        form {
-          margin: 20px auto;
-        }
-      }
-      .errorlist li{
-        display: none;
-      }
-    </style>
+    };
+  </script>
   </head>
+
   <body>
     <img
       class="hero-img"

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
-from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm
-from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst
+from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst
 from django.db.models import Q,F
 
 def IndexView(request):
@@ -33,6 +33,9 @@ def Login(request):
             request.session['owner'] = email
             flag = 1
             return redirect('SalonOwnerDashboard')
+        else:
+            content = {"message":"Something went wrong"}
+            return render(request,'Login.html',content)
     else:
         return render(request, 'Login.html')
 
@@ -54,11 +57,16 @@ def UpdateSalonStatus(request,id):
     
 def UserProfile(request):
     if request.session.has_key('user'):
-        cityNames  = CityMst.objects.values_list('CityName',flat=True)
-        areaNames  = AreaMst.objects.values_list('AreaName',flat=True)
+        areaNames  = AreaMst.objects.all()
         email = request.session.get("user")
         userdata=UserMst.objects.get(Email=email)
-        data = {"cities":cityNames,"areas":areaNames,"userdata":userdata}
+        salons = SalonMst.objects.all()
+        if request.method == 'POST':
+            area = request.POST['area']
+            salons = SalonMst.objects.filter(Area = area)
+            print(salons)
+            data = {"areas":areaNames,"userdata":userdata,"salons":salons}
+        data = {"areas":areaNames,"userdata":userdata,"salons":salons}
         return render(request,'User/UserProfile.html',data)
     else:
         return redirect('Login')
@@ -103,7 +111,7 @@ def CityTrans(request,id=0):
             form.save()
         return redirect('CityTrans')   
     
-    # return render(request, 'admin/CityForm.html', {'form': form,'data':data})
+
 def AreaTrans(request,id=0):
     if request.method == "GET":
         if id==0:
@@ -132,6 +140,7 @@ def UserTrans(request):
     form=UserForm(request.POST,request.FILES)
     if form.is_valid():
         form.save()
+        return render(request,'UserForm.html',{'form':form,'message':'You have registered successfully'})
     
     return render(request, 'UserForm.html', {'form': form})
 
@@ -236,16 +245,60 @@ def xxx(request):
 
 def OwnerProfile(request):
     if request.session.has_key('owner'):
-        return render(request,'owner/OwnerProfile.html')
-
-def SalonTrans(request):
-    form = SalonForm(request.POST, request.FILES)
-    if form.is_valid():
         email = request.session.get("owner")
         member = UserMst.objects.get(Email=email)  # Get the UserMst instance
-        instance = form.save(commit=False)  # Create an instance without saving to DB
-        instance.Owner = member  # Assign the UserMst instance, not the id
-        print(instance.Owner)
+        # get the salon by the owner id
+        salon = SalonMst.objects.get(Owner=member)
+        content = {"owner":member,"salon":salon}
+        return render(request,'owner/OwnerProfile.html',content)
 
-        instance.save()  # Save the instance to the database
-    return render(request, 'owner/SalonForm.html', {'form': form})
+def SalonTrans(request):
+    if request.session.has_key('owner'):
+        form = SalonForm(request.POST, request.FILES)
+        if form.is_valid():
+            email = request.session.get("owner")
+            member = UserMst.objects.get(Email=email)  # Get the UserMst instance
+            instance = form.save(commit=False)  # Create an instance without saving to DB
+            instance.Owner = member  # Assign the UserMst instance, not the id
+            print(instance.Owner)
+
+            instance.save()  # Save the instance to the database
+            return render(request,'owner/OwnerProfile.html',{"message":"You Have Registered the salon successfully"})
+    
+        return render(request, 'owner/SalonForm.html', {'form': form})
+    else:
+        return redirect('Login')
+    
+def SelectServices(request):
+    if request.session.has_key('owner'):
+        form = SelectServicesForm(request.POST)
+        if form.is_valid():
+            email = request.session.get("owner")
+            member = UserMst.objects.get(Email=email)  # Get the UserMst instance
+            # get the salon by the owner id
+            salon = SalonMst.objects.get(Owner=member)
+            instance = form.save(commit=False)
+            instance.SalonId = salon
+            instance.save()  # Save the instance to the database
+            return render(request,'owner/OwnerProfile.html',{"message":"You Have Selected the services successfully"})
+            
+            
+        return render(request, 'owner/SelectServices.html', {'form': form})
+    else:
+        return redirect('Login')
+    
+def SalonDetails(request,id):
+    if request.session.has_key('user'):
+        salon = SalonMst.objects.get(id = id)
+        servies = SelectedServicemsMst.objects.filter(SalonId = id)
+        print(servies)
+        return render(request,'SalonDetails.html',{'salon':salon,'services':servies})
+    else:
+        return redirect('Login')
+    
+
+
+
+
+
+

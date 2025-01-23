@@ -19,6 +19,8 @@ urlpatterns = [
     path("ServiceTrans", views.ServiceTrans, name="ServiceTrans"),
     path("ServiceTrans/<int:id>",views.ServiceTrans, name="ServiceTrans"),
     path("ServiceList", views.ServiceList, name="ServiceList"),
+    path("SelectServices", views.SelectServices, name="SelectServices"),
+    
 
 
 
@@ -35,6 +37,9 @@ urlpatterns = [
     path("UpdateSalonStatus/<int:id>",views.UpdateSalonStatus, name="UpdateSalonStatus"),
     path("OwnerProfile",views.OwnerProfile, name="OwnerProfile"),
     path("SalonTrans",views.SalonTrans, name="SalonTrans"),
+    path("SalonDetails/<int:id>",views.SalonDetails, name="SalonDetails"),
+    
+    
 
 
 

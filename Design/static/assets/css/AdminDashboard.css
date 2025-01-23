@@ -1,0 +1,111 @@
+
+    .salon-requests {
+        padding: 1rem;
+        margin: 20px;
+        background-color: #1a1a1a;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        overflow-x: auto;
+        color: #FFF;
+    }
+
+    .request-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 800px;
+    }
+
+    .request-table th,
+    .request-table td {
+        padding: 12px 15px;
+        text-align: left;
+        border-bottom: 1px solid #333;
+    }
+
+    .request-table th {
+        background-color: #1a1a1a;
+        color: #D4AF37;
+        font-weight: 600;
+        border-bottom: 2px solid #D4AF37;
+    }
+
+    .request-table tr:hover {
+        background-color: #252525;
+    }
+
+    .status-badge {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.85rem;
+    }
+
+    .status-badge.pending {
+        background-color: #D4AF37;
+        color: #1a1a1a;
+    }
+
+    .status-badge.verified {
+        background-color: #2ecc71;
+        color: #1a1a1a;
+    }
+
+    .verify-btn {
+        background-color: #D4AF37;
+        color: #1a1a1a;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .verify-btn:hover {
+        background-color: #FFD700;
+        transform: translateY(-1px);
+    }
+
+    .no-requests {
+        text-align: center;
+        color: #D4AF37;
+        font-style: italic;
+        padding: 20px;
+    }
+
+    .request-header {
+        color: #D4AF37;
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Responsive styles */
+    @media screen and (max-width: 768px) {
+        .salon-requests {
+            margin: 10px;
+        }
+        
+        .request-table {
+            font-size: 0.9rem;
+        }
+        
+        .request-table th,
+        .request-table td {
+            padding: 8px 10px;
+        }
+
+        .request-header {
+            font-size: 1.5rem;
+        }
+    }
+
+    /* Style for radio buttons */
+    .verify-form input[type="radio"] {
+        margin-right: 5px;
+        accent-color: #D4AF37;
+    }
+
+    .verify-form label {
+        color: #FFF;
+        margin-right: 15px;
+    }

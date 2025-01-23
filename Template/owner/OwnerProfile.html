@@ -9,19 +9,27 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     
     <link rel="stylesheet" href="{% static 'assets/css/OwnerProfile.css' %}">
-    
+    <script>
+        // On page load, display the alert box if a message exists
+        window.onload = function() {
+          const serverMessage = "{{ message|escapejs }}"; // Safely render the message from Django
+          if (serverMessage) {
+            alert(serverMessage); // Display the message in an alert box
+          }
+        };
+      </script>
 </head>
 <body>
     <div class="container">
         <div class="profile-card">
             <div class="profile-header">
-                <img src="{{ owner.profile_image.url }}" alt="Profile Picture" class="profile-image">
+                <img src="{{ salon.Img.url }}" alt="Profile Picture" class="profile-image">
                 
                 <div class="profile-info">
-                    <h1>{{ owner.name }}</h1>
+                    <h1>{{ owner.Name }}</h1>
                     <div class="location">
                         <i class="fas fa-map-marker-alt"></i>
-                        {{ owner.location }}
+                        {{ salon.Location  }} 
                     </div>
                     <div class="rating">
                         <i class="fas fa-star"></i>
@@ -58,11 +66,11 @@
                     <h3>Personal Information</h3>
                     <div class="detail-item">
                         <span class="detail-label">Email</span>
-                        <span class="detail-value">{{ owner.email }}</span>
+                        <span class="detail-value">{{ owner.Email }}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Phone</span>
-                        <span class="detail-value">{{ owner.phone }}</span>
+                        <span class="detail-value">{{ owner.PhoneNumber }}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Joined</span>
@@ -74,15 +82,15 @@
                     <h3>Salon Details</h3>
                     <div class="detail-item">
                         <span class="detail-label">Salon Name</span>
-                        <span class="detail-value">{{ owner.salon_name }}</span>
+                        <span class="detail-value">{{ salon.Name }}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Address</span>
-                        <span class="detail-value">{{ owner.salon_address }}</span>
+                        <span class="detail-value">{{ salon.Area.AreaName }}</span>
                     </div>
                     <div class="detail-item">
                         <span class="detail-label">Business Hours</span>
-                        <span class="detail-value">{{ owner.business_hours }}</span>
+                        <span class="detail-value">{{ salon.OpenTime }} to {{salon.CloseTime}}</span>
                     </div>
                 </div>
             </div>

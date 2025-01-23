@@ -189,11 +189,11 @@
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="sidebar-header">
+        <!-- <div class="sidebar-header">
             <img src="{{ owner.profile_image.url }}" alt="Profile Picture" class="sidebar-user-pic">
             <div class="sidebar-username">{{ owner.name }}</div>
             <div class="sidebar-email">{{ owner.email }}</div>
-        </div>
+        </div> -->
 
         <div class="sidebar-menu">
             <a href="{% url 'OwnerProfile' %}" class="menu-item">
@@ -204,7 +204,7 @@
                 <i class="fas fa-store"></i>
                 Salon Registration
             </a>
-            <a href="" class="menu-item">
+            <a href="{% url 'SelectServices' %}" class="menu-item">
                 <i class="fas fa-cut"></i>
                 Services
             </a>

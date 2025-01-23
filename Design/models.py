@@ -20,6 +20,9 @@ class ServiceMst(models.Model):
     ServiceName = models.CharField(max_length=30)
     def __str__(self):
         return self.ServiceName
+    
+
+
 class UserMst(models.Model):
     Name= models.CharField(max_length=20)
     UserName = models.CharField(max_length=20)
@@ -36,10 +39,20 @@ class SalonMst(models.Model):
     Owner = models.ForeignKey(UserMst, on_delete=models.CASCADE)
     Img = models.ImageField(default='default.jpg')
     Status = models.CharField(max_length=10)
-    Service = models.ForeignKey(ServiceMst, on_delete=models.CASCADE)
+    
     Area = models.ForeignKey(AreaMst, on_delete=models.CASCADE)
     City = models.ForeignKey(CityMst, on_delete=models.CASCADE)
     OpenTime = models.TimeField()
     CloseTime = models.TimeField()
     Type = models.CharField(max_length=10)
+    
 
+class SelectedServicemsMst(models.Model):
+    ServiceName = models.ForeignKey(ServiceMst, on_delete=models.CASCADE)
+    SalonId= models.ForeignKey(SalonMst, on_delete=models.CASCADE)
+    Price = models.IntegerField()
+
+class ImageMst(models.Model):
+    SalonId= models.ForeignKey(SalonMst, on_delete=models.CASCADE)
+    Img = models.ImageField(default='default.jpg')
+    
