@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
-from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm
-from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst
+from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm,ImageForm
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst
 from django.db.models import Q,F
+from django.forms import modelformset_factory
 
 def IndexView(request):
     content  = CityMst.objects.values_list('CityName',flat=True)
@@ -291,13 +292,37 @@ def SalonDetails(request,id):
     if request.session.has_key('user'):
         salon = SalonMst.objects.get(id = id)
         servies = SelectedServicemsMst.objects.filter(SalonId = id)
-        print(servies)
-        return render(request,'SalonDetails.html',{'salon':salon,'services':servies})
+        images = ImageMst.objects.filter(SalonId = id)
+        print(images)
+        return render(request,'SalonDetails.html',{'salon':salon,'services':servies,'images':images})
     else:
         return redirect('Login')
     
 
-
+def upload_images(request):
+    ImageFormSet = modelformset_factory(
+        ImageMst,
+        form=ImageForm,
+        extra=5  # Number of blank forms
+    )
+    if request.method == 'POST':
+        formset = ImageFormSet(request.POST, request.FILES, queryset=ImageMst.objects.none())
+        if formset.is_valid():
+            email = request.session.get("owner")
+            member = UserMst.objects.get(Email=email)  # Get the UserMst instance
+            # get the salon by the owner id
+            salon = SalonMst.objects.get(Owner=member)
+            
+            for form in formset:
+                if form.cleaned_data:
+                    instance = form.save(commit=False)
+                    instance.SalonId = salon
+                    instance.save() 
+                    
+            return redirect('OwnerProfile')
+    else:
+        formset = ImageFormSet(queryset=ImageMst.objects.none())
+    return render(request, 'owner/UploadImg.html', {'formset': formset})
 
 
 

@@ -50,3 +50,8 @@ class SelectServicesForm(forms.ModelForm):
         model = SelectedServicemsMst
         fields = ['ServiceName','Price']
 
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = ImageMst
+        fields = ['Img']  # Only include the `image` field
+

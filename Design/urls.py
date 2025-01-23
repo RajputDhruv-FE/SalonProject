@@ -38,6 +38,7 @@ urlpatterns = [
     path("OwnerProfile",views.OwnerProfile, name="OwnerProfile"),
     path("SalonTrans",views.SalonTrans, name="SalonTrans"),
     path("SalonDetails/<int:id>",views.SalonDetails, name="SalonDetails"),
+    path("upload_images",views.upload_images, name="upload_images"),
     
     
 
