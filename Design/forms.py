@@ -1,4 +1,4 @@
-from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst,BookingMst
 from django import forms
 
 class CityForm(forms.ModelForm):
@@ -24,19 +24,21 @@ class UserForm(forms.ModelForm):
         fields=['Name','UserName','Email','PhoneNumber','Password','Usertype','Img']
     def __init__(self,*args,**kwargs):
         super(UserForm, self).__init__(*args,**kwargs)
-        self.fields['Usertype'].empty_label = "--Select Usertype--"
+        self.fields['Usertype'].empty_label = "--Select Usertype--"\
+        
 
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = ServiceMst
         fields = "__all__"
 
+
 class SalonForm(forms.ModelForm):
     choices = [('Male', 'Male'), ('Female', 'Female'),('Unisex', 'Unisex')]
     Type = forms.ChoiceField(choices=choices,widget=forms.Select(attrs={'class':'form-control'}))
     class Meta:
         model = SalonMst
-        fields = ['Name','Location','Area','City','OpenTime','CloseTime','Type','Img']
+        fields = ['Name','Location','Area','City','OpenTime','CloseTime','NumberOfSeats','Type','Img']
     def __init__(self,*args,**kwargs):
         super(SalonForm, self).__init__(*args,**kwargs)
         self.fields['Area'].empty_label = "--Select Area--"
@@ -45,13 +47,20 @@ class SalonForm(forms.ModelForm):
         self.fields['CloseTime'].empty_label = "--Select Close Time--"
         self.fields['Type'].empty_label = "--Select Type--"
 
+
 class SelectServicesForm(forms.ModelForm):
     class Meta:
         model = SelectedServicemsMst
         fields = ['ServiceName','Price']
+        
 
 class ImageForm(forms.ModelForm):
     class Meta:
         model = ImageMst
         fields = ['Img']  # Only include the `image` field
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = BookingMst
+        fields = ['BookingDate','BookingTime','ServiceId']
 

@@ -39,7 +39,7 @@ class SalonMst(models.Model):
     Owner = models.ForeignKey(UserMst, on_delete=models.CASCADE)
     Img = models.ImageField(default='default.jpg')
     Status = models.CharField(max_length=10)
-    
+    NumberOfSeats = models.IntegerField()
     Area = models.ForeignKey(AreaMst, on_delete=models.CASCADE)
     City = models.ForeignKey(CityMst, on_delete=models.CASCADE)
     OpenTime = models.TimeField()
@@ -55,4 +55,15 @@ class SelectedServicemsMst(models.Model):
 class ImageMst(models.Model):
     SalonId= models.ForeignKey(SalonMst, on_delete=models.CASCADE)
     Img = models.ImageField(default='default.jpg')
+
+class BookingMst(models.Model):
+    BookingDate = models.DateTimeField()
+    BookingTime = models.TimeField()
+    ServiceId = models.ForeignKey(SelectedServicemsMst, on_delete=models.CASCADE)
+    SalonId = models.ForeignKey(SalonMst, on_delete=models.CASCADE)
+    UserId = models.ForeignKey(UserMst, on_delete=models.CASCADE)
+    BillAmount = models.IntegerField()
+
+
+
     

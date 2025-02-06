@@ -5,7 +5,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Hair Harmony</title>
-    
 
     <!-- Font Awesome -->
     <link
@@ -24,16 +23,13 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="{% static 'assets/css/index.css' %}" >
-    
-    
-   
-    <link rel="icon" href="{% static 'favicon.ico' %}" sizes="32x32"  />
-     
+    <link rel="stylesheet" href="{% static 'assets/css/index.css' %}" />
+
+    <link rel="icon" href="{% static 'final.png' %}" sizes="32x32" />
   </head>
   <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
       <div class="container">
         <a class="navbar-brand" href="#">Hair Harmony</a>
         <button
@@ -44,7 +40,10 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse bg-light p-3 rounded-3 " id="navbarNav">
+        <div
+          class="collapse navbar-collapse bg-light p-3 rounded-3"
+          id="navbarNav"
+        >
           <ul class="navbar-nav ms-auto">
             <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
             <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
@@ -111,34 +110,33 @@
           <p class="lead">
             Discover top-rated salons and book your appointment instantly
           </p>
-          <div class="search-box">
-            <div class="row">
-              <!-- <div class="col-md-4">
-                <select class="form-control" id="citySelect">
-                  <option value="">Select City</option>
-                  {% for city in cities %}
-                  <option>{{city}}</option>
-                  {% endfor %}
-                </select>
-              </div> -->
-              <div class="col">
-                <select class="form-control" id="areaSelect">
-                  <option value="">Select Area</option>
-                  <option>Waghodiya</option>
-                  <option>Manjalpur</option>
-                  <option>Harni</option>
-                  <option>Sama</option>
-                  <option>Akota</option>
-                </select>
-              </div>
-              <div class="col-md-4 d-flex gap-2">
-                <button class="btn btn-primary flex-grow-1">Search Salons</button>
-                <button class="btn btn-outline-primary" onclick="getCurrentLocation()">
-                  <i class="fas fa-location-arrow"></i>
-                </button>
+          <form action="" method="post">
+            {% csrf_token %}
+
+            <div class="search-box">
+              <div class="row">
+                <div class="col">
+                  <select name="area" class="form-control" id="areaSelect">
+                    <option value="">Select Area</option>
+                    {% for area in areas %}
+                    <option value="{{area.id}}">{{area}}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                  <button type="submit" class="btn btn-primary flex-grow-1">
+                    Search Salons
+                  </button>
+                  <button
+                    class="btn btn-outline-primary"
+                    onclick="getCurrentLocation()"
+                  >
+                    <i class="fas fa-location-arrow"></i>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </section>
@@ -152,187 +150,10 @@
 
         <!-- Salon Listings -->
         <div class="row">
-          <!-- Salon Card 1 -->
-          <!-- <div class="col-md-4 mb-4">
-            <div class="salon-card">
-              <img
-                src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a"
-                alt="Glamour Studio"
-              />
-              <div class="salon-info">
-                <h4>Glamour Studio</h4>
-                <p class="location">
-                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
-                </p>
-                <div class="salon-details">
-                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
-                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                  <span>(245 reviews)</span>
-                </div>
-                <div class="salon-services">
-                  <span class="badge bg-light text-dark">Haircut</span>
-                  <span class="badge bg-light text-dark">Coloring</span>
-                  <span class="badge bg-light text-dark">Spa</span>
-                </div>
-                <button class="btn btn-primary w-100 mt-3">
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-4 mb-4">
-            <div class="salon-card">
-              <img
-                src="https://plus.unsplash.com/premium_photo-1661404164814-9d3c137097aa?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmVhdXR5fGVufDB8fDB8fHww"
-                alt="Glamour Studio"
-              />
-              <div class="salon-info">
-                <h4>Glamour Studio</h4>
-                <p class="location">
-                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
-                </p>
-                <div class="salon-details">
-                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
-                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                  <span>(245 reviews)</span>
-                </div>
-                <div class="salon-services">
-                  <span class="badge bg-light text-dark">Haircut</span>
-                  <span class="badge bg-light text-dark">Coloring</span>
-                  <span class="badge bg-light text-dark">Spa</span>
-                </div>
-                <button class="btn btn-primary w-100 mt-3">
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-4 mb-4">
-            <div class="salon-card">
-              <img
-                src="https://media.istockphoto.com/id/1392177439/photo/woman-at-hairdresser.webp?a=1&b=1&s=612x612&w=0&k=20&c=Jh-ZQkMekMUhhXCU1nA5BEBsZfNaPOme3mN0mdXIxEI="
-                alt="Glamour Studio"
-              />
-              <div class="salon-info">
-                <h4>Glamour Studio</h4>
-                <p class="location">
-                  <i class="fas fa-map-marker-alt"></i> Manhattan, NY
-                </p>
-                <div class="salon-details">
-                  <span><i class="fas fa-clock"></i> Opens 9:00 AM</span>
-                  <span><i class="fas fa-phone"></i> (212) 555-0123</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star-half-alt"></i>
-                  <span>(245 reviews)</span>
-                </div>
-                <div class="salon-services">
-                  <span class="badge bg-light text-dark">Haircut</span>
-                  <span class="badge bg-light text-dark">Coloring</span>
-                  <span class="badge bg-light text-dark">Spa</span>
-                </div>
-                <button class="btn btn-primary w-100 mt-3">
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          </div> -->
-
-          <!-- Salon Card 2  -->
-          <!-- <div class="col-md-4 mb-4">
-            <div class="salon-card">
-              <img
-                src="https://media.istockphoto.com/id/692999494/photo/hairdresser-cutting-some-hair-tips.webp?a=1&b=1&s=612x612&w=0&k=20&c=tlx34JXu-XOOUzvSmQbH0Ef4288Tb4wwOHWHP8KYjxI="
-                alt="Beauty Lounge LA"
-              />
-              <div class="salon-info">
-                <h4>Beauty Lounge LA</h4>
-                <p class="location">
-                  <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
-                </p>
-                <div class="salon-details">
-                  <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
-                  <span><i class="fas fa-phone"></i> (310) 555-0123</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(189 reviews)</span>
-                </div>
-                <div class="salon-services">
-                  <span class="badge bg-light text-dark">Makeup</span>
-                  <span class="badge bg-light text-dark">Facial</span>
-                  <span class="badge bg-light text-dark">Massage</span>
-                </div>
-                <button class="btn btn-primary w-100 mt-3">
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          </div> -->
-          <!-- <div class="col-md-4 mb-4">
-            <div class="salon-card">
-              <img
-                src="https://images.unsplash.com/photo-1463430144406-394c977562d7?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8aGFpciUyMHN0eWxlfGVufDB8fDB8fHww"
-                alt="Beauty Lounge LA"
-              />
-              <div class="salon-info">
-                <h4>Beauty Lounge LA</h4>
-                <p class="location">
-                  <i class="fas fa-map-marker-alt"></i> Beverly Hills, LA
-                </p>
-                <div class="salon-details">
-                  <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
-                  <span><i class="fas fa-phone"></i> (310) 555-0123</span>
-                </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(189 reviews)</span>
-                </div>
-                <div class="salon-services">
-                  <span class="badge bg-light text-dark">Makeup</span>
-                  <span class="badge bg-light text-dark">Facial</span>
-                  <span class="badge bg-light text-dark">Massage</span>
-                </div>
-                <button class="btn btn-primary w-100 mt-3">
-                  Book Appointment
-                </button>
-              </div>
-            </div>
-          </div> -->
-
           {% for salon in salons %}
           <div class="col-md-4 mb-4">
             <div class="salon-card">
-              <img
-                src="{{salon.Img.url}}" 
-                alt="Beauty Lounge LA"
-              />
+              <img src="{{salon.Img.url}}" alt="Beauty Lounge LA" />
               <div class="salon-info">
                 <h4>{{salon.Name}}</h4>
                 <p class="location">
@@ -340,7 +161,10 @@
                 </p>
                 <div class="salon-details">
                   <span><i class="fas fa-clock"></i> Opens 8:00 AM</span>
-                  <span><i class="fas fa-phone"></i> {{salon.Owner.PhoneNumber}}</span>
+                  <span
+                    ><i class="fas fa-phone"></i>
+                    {{salon.Owner.PhoneNumber}}</span
+                  >
                 </div>
                 <div class="rating">
                   <i class="fas fa-star"></i>
@@ -355,14 +179,16 @@
                   <span class="badge bg-light text-dark">Facial</span>
                   <span class="badge bg-light text-dark">Massage</span>
                 </div>
-                <button class="btn btn-primary w-100 mt-3">
+                <a
+                  href="{% url 'SalonDetails' salon.id %}"
+                  class="btn btn-primary w-100 mt-3"
+                >
                   Book Appointment
-                </button>
+                </a>
               </div>
             </div>
           </div>
           {% endfor %}
-
         </div>
       </div>
     </section>
@@ -429,47 +255,58 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-   async function getCurrentLocation() {
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      async function (position) { 
-        const latitude = position.coords.latitude;
-        const longitude = position.coords.longitude;
-        console.log("Latitude:", latitude);
-        console.log("Longitude:", longitude);
+      async function getCurrentLocation() {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            async function (position) {
+              const latitude = position.coords.latitude;
+              const longitude = position.coords.longitude;
+              console.log("Latitude:", latitude);
+              console.log("Longitude:", longitude);
 
-        // Use reverse geocoding to get city and area
-        const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
+              // Use reverse geocoding to get city and area
+              const url = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json`;
 
-        try {
-          const response = await fetch(url);
-          const data = await response.json();
-          console.log(data.address)
+              try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data.address);
 
-          const city = data.address.state_district || data.address.town || data.address.village;
-          const state = data.address.state || data.address.town || data.address.village;
-          const area = data.address.neighbourhood || data.address.suburb || data.address.road;
+                const city =
+                  data.address.state_district ||
+                  data.address.town ||
+                  data.address.village;
+                const state =
+                  data.address.state ||
+                  data.address.town ||
+                  data.address.village;
+                const area =
+                  data.address.neighbourhood ||
+                  data.address.suburb ||
+                  data.address.road;
 
-          // console.log("City:", city);
-          // console.log("Area:", area);
-          // console.log("State:", state);
-        
-          document.getElementById('areaSelect').innerHTML=`<option value="${area}">${area}</option>`
+                // console.log("City:", city);
+                // console.log("Area:", area);
+                // console.log("State:", state);
 
-        } catch (error) {
-          console.error("Error fetching location data:", error);
+                document.getElementById(
+                  "areaSelect"
+                ).innerHTML = `<option value="${area}">${area}</option>`;
+              } catch (error) {
+                console.error("Error fetching location data:", error);
+              }
+            },
+            function (error) {
+              console.error("Error getting location:", error);
+              alert(
+                "Unable to get your location. Please enable location services and try again."
+              );
+            }
+          );
+        } else {
+          alert("Geolocation is not supported by your browser");
         }
-      },
-      function (error) {
-        console.error("Error getting location:", error);
-        alert("Unable to get your location. Please enable location services and try again.");
       }
-    );
-  } else {
-    alert("Geolocation is not supported by your browser");
-  }
-}
-
     </script>
   </body>
 </html>

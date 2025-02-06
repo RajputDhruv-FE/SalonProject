@@ -1,23 +1,29 @@
 from django.shortcuts import render,redirect
-from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm,ImageForm
+from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm,ImageForm,BookingForm
 from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst
 from django.db.models import Q,F
 from django.forms import modelformset_factory
+from django.core.mail import send_mail
+from django.conf import settings
+
 
 def IndexView(request):
-    content  = CityMst.objects.values_list('CityName',flat=True)
-    cityNames = [city.capitalize() for city in content]
+
+    areaNames  = AreaMst.objects.all()
     salons = SalonMst.objects.all()
-    for i in salons:
-        print(i.Name)
-    data = {"cities":cityNames,"salons":salons}
+    if request.method == 'POST':
+        area = request.POST['area']
+        salons = SalonMst.objects.filter(Area = area)
+        print(salons)
+        data = {"areas":areaNames,"salons":salons}
+    data = {"areas":areaNames,"salons":salons}
     return render(request, 'index.html',data)
-# Create your views here.
+
+
 
 def Login(request):
     flag = 0
     if request.method == 'POST' and flag ==0:
-        # username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
         usertype = request.POST['acter']
@@ -33,12 +39,14 @@ def Login(request):
         elif flag == 0 and usertype == 'Owner' and (UserMst.objects.filter(Q(Email = email)& Q(Password = password)& Q(Status="verified")).exists()): 
             request.session['owner'] = email
             flag = 1
-            return redirect('SalonOwnerDashboard')
+            return redirect('OwnerProfile')
         else:
             content = {"message":"Something went wrong"}
             return render(request,'Login.html',content)
     else:
         return render(request, 'Login.html')
+    
+
 
 def AdminDashboard(request):
     if request.session.has_key('admin'):
@@ -49,12 +57,16 @@ def AdminDashboard(request):
     else:
         return redirect('Login')
     
+
+    
 def UpdateSalonStatus(request,id):
     status = request.POST['status']
     salondata = UserMst.objects.get(id = id)
     salondata.Status = status
     salondata.save()
     return redirect('AdminDashboard')
+
+
     
 def UserProfile(request):
     if request.session.has_key('user'):
@@ -71,11 +83,16 @@ def UserProfile(request):
         return render(request,'User/UserProfile.html',data)
     else:
         return redirect('Login')
+    
+
+
 def SalonOwnerDashboard(request):
     if request.session.has_key('owner'):
-        return render(request,'owner/SalonOwnerDashboard.html')
+        return render(request,'owner/OwnerProfile.html')
     else:
          return redirect('Login')
+    
+
     
 def Logout(request):
     if 'admin' in request.session:
@@ -99,8 +116,6 @@ def CityTrans(request,id=0):
             cid = CityMst.objects.get(pk= id)
             form = CityForm(instance=cid)
         return render(request, 'admin/CityForm.html', {'form':form})
-    
-
     # to update the city name
     else:
         if id == 0:
@@ -113,6 +128,7 @@ def CityTrans(request,id=0):
         return redirect('CityTrans')   
     
 
+
 def AreaTrans(request,id=0):
     if request.method == "GET":
         if id==0:
@@ -121,8 +137,6 @@ def AreaTrans(request,id=0):
             aid = AreaMst.objects.get(pk= id)
             form = AreaForm(instance=aid)
         return render(request, 'admin/AreaForm.html', {'form':form})
-
-
     # to update the Area name
     else:
         if id == 0:
@@ -133,14 +147,15 @@ def AreaTrans(request,id=0):
         if form.is_valid():
             form.save()
         return redirect('AreaTrans')
-    
-    # return render(request, 'AreaForm.html', {'form': form})
+
 
 def UserTrans(request):
-    
     form=UserForm(request.POST,request.FILES)
     if form.is_valid():
+        email = form.cleaned_data.get('Email')
+        name = form.cleaned_data.get('Name')
         form.save()
+        RegistrationEmail(email,name)
         return render(request,'UserForm.html',{'form':form,'message':'You have registered successfully'})
     
     return render(request, 'UserForm.html', {'form': form})
@@ -153,10 +168,7 @@ def ServiceTrans(request,id=0):
             sid = ServiceMst.objects.get(pk= id)
             form = ServiceForm(instance=sid)
         return render(request, 'admin/Service.html', {'form':form})
-    
-
-    # to update the Service name
-    else:
+    else: #to update the Service name 
         if id == 0:
             form = ServiceForm(request.POST)
         else:
@@ -165,19 +177,24 @@ def ServiceTrans(request,id=0):
         if form.is_valid():
             form.save()
         return redirect('ServiceTrans')
+    
+
 
 def CityList(request):
     content = {"CityList":CityMst.objects.all()}
 
     return render(request,'admin/CityList.html',content)
 
+
 def AreaList(request):
     content = {"AreaList":AreaMst.objects.all()}
     return render(request,'admin/AreaList.html',content)
 
+
 def ServiceList(request):
     content = {"ServiceList":ServiceMst.objects.all()}
     return render(request,'admin/ServiceList.html',content)
+
 
 def ChangePassword(request):
 
@@ -200,16 +217,19 @@ def HandleChangePassword(request):
                 member = UserMst.objects.get(Email = email)
                 member.Password = new_password
                 member.save()
+                SendEmail(email,new_password)
                 content = {"message":"Password Changed Successfully"}
-                return render(request,'ChangePassword.html',content)
+                return render(request,'User/ChangePassword.html',content)
             else:
                 content = {"message":"Old Password is Incorrect"}
-                return render(request,'ChangePassword.html',content)
+                return render(request,'User/ChangePassword.html',content)
         else:
             content = {"message":"New Password and Confirm Password do not match"}
-            return render(request,'ChangePassword.html',content)
+            return render(request,'User/ChangePassword.html',content)
     else:
-        return render(request,'ChangePassword.html')
+        return render(request,'User/ChangePassword.html')
+    
+
 
 def ForgetPassword(request):
     if request.method == 'POST':
@@ -223,26 +243,7 @@ def ForgetPassword(request):
     else:
         return render(request,'User/ForgetPassword.html')
     
-def xxx(request):
-    import smtplib
-    from email.mime.text import MIMEText
 
-    sender_email = "salonproject01@gmail.com"
-    sender_password = "salon@1234"
-    recipient_email = "umeshshah.uro@gmail.com"
-    subject = "Hello from Python"
-    body = "This is the body of the email."
-
-# Create the MIMEText object
-    html_message = MIMEText(body, 'html')
-    html_message['Subject'] = subject
-    html_message['From'] = sender_email
-    html_message['To'] = recipient_email
-
-# Connect to the SMTP server and send the email
-    with smtplib.SMTP_SSL('smtp.gmail.com', 465) as server:
-        server.login(sender_email, sender_password)
-        server.sendmail(sender_email, recipient_email, html_message.as_string())
 
 def OwnerProfile(request):
     if request.session.has_key('owner'):
@@ -252,6 +253,8 @@ def OwnerProfile(request):
         salon = SalonMst.objects.get(Owner=member)
         content = {"owner":member,"salon":salon}
         return render(request,'owner/OwnerProfile.html',content)
+    
+    
 
 def SalonTrans(request):
     if request.session.has_key('owner'):
@@ -270,6 +273,8 @@ def SalonTrans(request):
     else:
         return redirect('Login')
     
+
+    
 def SelectServices(request):
     if request.session.has_key('owner'):
         form = SelectServicesForm(request.POST)
@@ -287,6 +292,8 @@ def SelectServices(request):
         return render(request, 'owner/SelectServices.html', {'form': form})
     else:
         return redirect('Login')
+    
+
     
 def SalonDetails(request,id):
     if request.session.has_key('user'):
@@ -321,9 +328,70 @@ def upload_images(request):
                     
             return redirect('OwnerProfile')
     else:
+        email = request.session.get("owner")
+        member = UserMst.objects.get(Email=email)  # Get the UserMst instance
+        # get the salon by the owner id
+        salon = SalonMst.objects.get(Owner=member)
+        images = ImageMst.objects.filter(SalonId = salon.id)
         formset = ImageFormSet(queryset=ImageMst.objects.none())
-    return render(request, 'owner/UploadImg.html', {'formset': formset})
+    return render(request, 'owner/UploadImg.html', {'formset': formset,'images':images})
 
 
+def BookinTransaction(request):
+    form =BookingForm ()
+    return render(request, 'BookingForm.html', {'form': form})
+def ShowSlots(request):
+    return render(request,'SlotSelection.html')
 
 
+def SendEmail(email,password):
+    subject = 'Welcome to the Family of Hari Harmony'
+    message = f"""Dear User,
+    
+This is a confirmation that your password for your Hari Harmony account was successfully changed. If you made this change, no further action is required.
+
+If you didn’t make this change, your account may be compromised. Please reset your password immediately using the following link:
+
+www.hariharmony.com/reset-password
+
+To keep your account secure:
+- Never share your password with anyone.
+- Use a strong, unique password for your account.
+
+If you have any questions or need assistance, feel free to contact us at support@hariharmony.com.
+
+Stay secure,  
+The Hari Harmony Team  
+www.hariharmony.com | Contact Support
+"""
+    email_from = settings.EMAIL_HOST_USER  # Sender email
+    recipient_list = ["dhurvraj142@gmail.com"]  # Recipient email
+    if send_mail(subject, message, email_from, recipient_list):
+        print("Email sent successfully")
+    return redirect('IndexView')
+
+
+def RegistrationEmail(email,name):
+    subject = 'Welcome to the Family of Hari Harmony'
+    message = f"""Dear {name},
+    
+Welcome to Hari Harmony! We’re thrilled to have you as part of our community. Your account has been successfully registered, and you're all set to explore the features and benefits we offer.
+
+Here’s what you can do next:
+- Discover Features: Browse through our platform to get familiar with all we offer.
+- Stay Connected: Keep an eye on upcoming events, announcements, and exclusive content.
+- Get Support: Our team is always here to assist you whenever you need help.
+
+If you have any questions or need assistance, feel free to contact us at support@hariharmony.com.
+
+Thank you for choosing Hari Harmony! We look forward to supporting you on your journey.
+
+Warm regards,  
+The Hari Harmony Team  
+www.hariharmony.com | Contact Support
+"""
+    email_from = settings.EMAIL_HOST_USER  # Sender email
+    recipient_list = [email]  # Recipient email
+    if send_mail(subject, message, email_from, recipient_list):
+        print("Email sent successfully")
+    return redirect('IndexView')
