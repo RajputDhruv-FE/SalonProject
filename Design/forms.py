@@ -1,4 +1,4 @@
-from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst,BookingMst
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst,SlotBookingMst
 from django import forms
 
 class CityForm(forms.ModelForm):
@@ -36,6 +36,10 @@ class ServiceForm(forms.ModelForm):
 class SalonForm(forms.ModelForm):
     choices = [('Male', 'Male'), ('Female', 'Female'),('Unisex', 'Unisex')]
     Type = forms.ChoiceField(choices=choices,widget=forms.Select(attrs={'class':'form-control'}))
+    OpenTime = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time',}))
+    CloseTime = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time',}))
+
+
     class Meta:
         model = SalonMst
         fields = ['Name','Location','Area','City','OpenTime','CloseTime','NumberOfSeats','Type','Img']
@@ -60,7 +64,10 @@ class ImageForm(forms.ModelForm):
         fields = ['Img']  # Only include the `image` field
 
 class BookingForm(forms.ModelForm):
+    BookingDate = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    BookingTime = forms.TimeField(widget=forms.TimeInput(attrs={'type': 'time',}))
     class Meta:
-        model = BookingMst
+        model = SlotBookingMst
+      
         fields = ['BookingDate','BookingTime','ServiceId']
 

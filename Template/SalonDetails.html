@@ -149,9 +149,11 @@
         border-radius: 4px;
         cursor: pointer;
         font-size: 16px;
-        width: 100%;
+        width: 250px;
+        height: 50px;
         font-weight: bold;
         transition: all 0.3s ease;
+        text-decoration: none;
       }
 
       .booking-btn:hover {
@@ -224,56 +226,10 @@
             <span>{{ salon.Status }}</span>
           </div>
         </div>
+        <a class="booking-btn" href="{% url 'ShowSlots' salon.id %}">Book your appointment</a>
       </div>
 
-      <!-- New Booking Section -->
-      <div class="booking-section">
-        <h2>Book an Appointment</h2>
-        <div class="booking-container">
-          <div class="booking-form">
-            <form action="" method="POST">
-              {% csrf_token %}
-              <div class="form-group">
-                <label>Select Service:</label>
-                <select name="service" required class="form-control">
-                  {% for service in services %}
-                  <option value="{{ service.id }}">
-                    {{ service.ServiceName }} - ₹{{ service.Price }}
-                  </option>
-                  {% endfor %}
-                </select>
-              </div>
-
-              <div class="form-group">
-                <label>Select Date:</label>
-                <input type="date" name="date" required class="form-control" />
-              </div>
-
-              <div class="form-group">
-                <label>Select Time Slot:</label>
-                <input
-                  type="time"
-                  name="time_slot"
-                  required
-                  class="form-control"
-                />
-              </div>
-
-              <!-- <div class="form-group">
-                <label>Email:</label>
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  class="form-control"
-                />
-              </div> -->
-
-              <button type="submit" class="booking-btn">Book Now</button>
-            </form>
-          </div>
-        </div>
-      </div>
+      
 
       <div class="services-section">
         <h2>Our Services</h2>

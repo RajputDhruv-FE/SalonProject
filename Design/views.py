@@ -1,10 +1,11 @@
 from django.shortcuts import render,redirect
 from . forms import CityForm,AreaForm,UserForm,ServiceForm,SalonForm,SelectServicesForm,ImageForm,BookingForm
-from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst
+from . models import CityMst,AreaMst,UserMst,ServiceMst,SalonMst,SelectedServicemsMst,ImageMst,SlotBookingMst
 from django.db.models import Q,F
 from django.forms import modelformset_factory
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import datetime, timedelta
 
 
 def IndexView(request):
@@ -88,6 +89,7 @@ def UserProfile(request):
 
 def SalonOwnerDashboard(request):
     if request.session.has_key('owner'):
+       
         return render(request,'owner/OwnerProfile.html')
     else:
          return redirect('Login')
@@ -251,7 +253,9 @@ def OwnerProfile(request):
         member = UserMst.objects.get(Email=email)  # Get the UserMst instance
         # get the salon by the owner id
         salon = SalonMst.objects.get(Owner=member)
-        content = {"owner":member,"salon":salon}
+        bookings = SlotBookingMst.objects.filter(SalonId =salon.id)
+        content = {"owner":member,"salon":salon,"bookings":bookings}
+
         return render(request,'owner/OwnerProfile.html',content)
     
     
@@ -337,11 +341,57 @@ def upload_images(request):
     return render(request, 'owner/UploadImg.html', {'formset': formset,'images':images})
 
 
-def BookinTransaction(request):
-    form =BookingForm ()
-    return render(request, 'BookingForm.html', {'form': form})
-def ShowSlots(request):
-    return render(request,'SlotSelection.html')
+def BookinTransaction(request,id):  
+     if request.method == 'POST':
+        
+        service=request.POST['service']
+        date=request.POST['date']
+        time=request.POST['time_slot']
+        
+        serviceobj = SelectedServicemsMst.objects.get(id = service)
+        salon = SalonMst.objects.get(id = id)
+        user = UserMst.objects.get(Email = request.session.get('user'))
+        amount  = serviceobj.Price
+        
+        SlotBookingMst.objects.create(BookingDate=date,TimeSlote=time,ServiceId=serviceobj,UserId=user,SalonId=salon,BillAmount=amount)
+        send_appointment_confirmation_email(user.Email,user.Name,service,date,time,salon.Location,amount)
+        return redirect(UserProfile)
+     
+# for the input taken in 24hour formate
+def generate_slots(opening_time, closing_time):
+    slots = []
+    current_time = datetime.strptime(str(opening_time), "%H:%M:%S")
+    closing_time = datetime.strptime(str(closing_time), "%H:%M:%S")
+
+    while current_time < closing_time:
+        slot = f"{current_time.strftime('%I:%M %p')} - {(current_time + timedelta(hours=1)).strftime('%I:%M %p')}"
+        slots.append(slot)
+        current_time += timedelta(hours=1)
+    
+    return slots
+
+# def generate_slots(opening_time, closing_time):
+#     slots = []
+#     print(opening_time,closing_time)
+    
+#     # Convert 12-hour format strings to datetime objects
+#     opening_time = datetime.strptime(opening_time, "%I:%M %p")
+#     closing_time = datetime.strptime(closing_time, "%I:%M %p")
+
+#     current_time = opening_time
+#     while current_time < closing_time:
+#         slot = f"{current_time.strftime('%I:%M %p')} - {(current_time + timedelta(hours=1)).strftime('%I:%M %p')}"
+#         slots.append(slot)
+#         current_time += timedelta(hours=1)
+    
+#     return slots
+
+def ShowSlots(request,id):
+    salon = SalonMst.objects.get(id = id)
+    servies = SelectedServicemsMst.objects.filter(SalonId = id)
+    time_slots = generate_slots(salon.OpenTime, salon.CloseTime)
+    print(time_slots)
+    return render(request,'BookingForm.html',{'slots':time_slots,"salon":salon,"services":servies})
 
 
 def SendEmail(email,password):
@@ -392,6 +442,43 @@ www.hariharmony.com | Contact Support
 """
     email_from = settings.EMAIL_HOST_USER  # Sender email
     recipient_list = [email]  # Recipient email
+    if send_mail(subject, message, email_from, recipient_list):
+        print("Email sent successfully")
+    return redirect('IndexView')
+
+
+def send_appointment_confirmation_email(user_email, user_name, services, date, time, location, total):
+    subject = "Your Salon Appointment is Confirmed – Hari Harmony"
+    
+    # Creating bill details dynamically
+    
+    message = f"""Dear {user_name},
+
+Thank you for booking your salon appointment with Hari Harmony! We are excited to provide you with the best service. Below are the details of your appointment:
+
+📅 Appointment Details:
+- Service(s) Booked: {", ".join(services)}
+- Date & Time: {date} at {time}
+- Salon Location: {location}
+
+💳 Bill Summary:
+
+Total Amount: ₹{total}
+
+
+📌 Important Information:
+✔️ Please arrive 10 minutes early to ensure a smooth experience.
+✔️ In case of any changes, you can reschedule or cancel your appointment here: www.hariharmony.com/reschedule
+✔️ If you have any questions, feel free to contact us at support@hariharmony.com.
+
+We look forward to serving you!
+
+Best regards,
+The Hari Harmony Team
+🌐 www.hariharmony.com | 📞 +91-XXXXXXXXXX
+"""
+    email_from = settings.EMAIL_HOST_USER  # Sender email
+    recipient_list = [user_email]  # Recipient email
     if send_mail(subject, message, email_from, recipient_list):
         print("Email sent successfully")
     return redirect('IndexView')

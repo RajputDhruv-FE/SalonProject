@@ -1,16 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="">
-        {% csrf_token %}
-        {{form.as_p}}
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Appointment</title>
+    <style>
+      body {
+        background: #121212;
+        color: #fff;
+      }
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
 
-        <input type="submit" value="Book Appointment">
-    </form>
-</body>
+      .section {
+        margin-bottom: 30px;
+      }
+
+      .time-slots {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
+        margin-top: 20px;
+      }
+
+      .time-slot {
+        display: none;
+      }
+
+      .time-slot-label {
+        display: block;
+        padding: 10px;
+        text-align: center;
+        background-color: #d1a208;
+       
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      .time-slot:checked + .time-slot-label {
+        background-color: #a58008;
+        color: white;
+      }
+
+      select,
+      input[type="date"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      input[type=submit] {
+        background-color: #d1a208;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #a58008;
+      }
+      input[type="radio"] {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Book Appointment</h1>
+
+      <div class="section">
+        <form action="{% url 'BookinTransaction' salon.id %}" method="post">
+          {% csrf_token %}
+          <h2>Select Service</h2>
+          <select name="service" required class="form-control">
+            {% for service in services %}
+            <option value="{{ service.id }}">
+              {{ service.ServiceName }} - ₹{{ service.Price }}
+            </option>
+            {% endfor %}
+          </select>
+                </div>
+          
+                <div class="section">
+          <h2>Select Date</h2>
+          <input type="date" id="appointment-date" name="date" min="" />
+                </div>
+          
+                <div class="section">
+          <h2>Select Time Slot</h2>
+          <div class="time-slots" id="time-slots-container" >
+            {% for slot in slots %}
+            <div>
+              <input
+                type="radio"
+                name="time_slot"
+                id="slot-{{slot}}"
+                class="time-slot"
+                value="{{ slot }}"
+              />
+              <label for="slot-{{slot}}" class="time-slot-label">{{ slot }}</label>
+            </div>
+          
+              {% endfor %}
+          
+          </div>
+                </div>
+          
+                <input type="submit" class="" value="Book Appointment">
+        </form>
+    </div>
+
+    <script>
+      // Set minimum date to today
+      // const today = new Date().toISOString().split("T")[0];
+      // document.getElementById("appointment-date").min = today;
+
+      // // Generate time slots from 9 AM to 5 PM
+      // const timeSlots = [
+      //   "09:00 AM",
+      //   "10:00 AM",
+      //   "11:00 AM",
+      //   "12:00 PM",
+      //   "01:00 PM",
+      //   "02:00 PM",
+      //   "03:00 PM",
+      //   "04:00 PM",
+      //   "05:00 PM",
+      // ];
+
+      // // Generate time slot elements
+      // const timeSlotsContainer = document.getElementById(
+      //   "time-slots-container"
+      // );
+      // timeSlots.forEach((time, index) => {
+      //   const slotHtml = `
+      //           <div>
+      //               <input type="radio" name="time-slot" id="slot-${index}" class="time-slot" value="${time}">
+      //               <label for="slot-${index}" class="time-slot-label">${time}</label>
+      //           </div>
+      //       `;
+      //   timeSlotsContainer.innerHTML += slotHtml;
+      // });
+
+      // Show time slots when date is selected
+      
+
+      // function bookAppointment() {
+      //   const service = document.getElementById("service").value;
+      //   const date = document.getElementById("appointment-date").value;
+      //   const selectedTimeSlot = document.querySelector(
+      //     'input[name="time-slot"]:checked'
+      //   );
+
+      //   if (!service) {
+      //     alert("Please select a service");
+      //     return;
+      //   }
+      //   if (!date) {
+      //     alert("Please select a date");
+      //     return;
+      //   }
+      //   if (!selectedTimeSlot) {
+      //     alert("Please select a time slot");
+      //     return;
+      //   }
+
+      //   const appointmentDetails = {
+      //     service: service,
+      //     date: date,
+      //     timeSlot: selectedTimeSlot.value,
+      //   };
+
+      //   // Here you can add code to send the appointment details to your backend
+      //   console.log("Appointment Details:", appointmentDetails);
+      //   alert("Appointment booked successfully!");
+      // }
+    </script>
+  </body>
 </html>

@@ -107,6 +107,40 @@
               >
             </div>
           </div>
+
+        
+          
+        </div>
+        <div class="detail-card bookings-card">
+          <h3>Recent Bookings</h3>
+          {% if bookings %}
+            <div class="bookings-list">
+              {% for booking in bookings %}
+                <div class="booking-item">
+                  <div class="booking-header">
+                    <i class="fas fa-user"></i>
+                    <span class="customer-name">{{ booking.UserId.Name }}</span>
+                    <span class="booking-date">{{ booking.BookingDate|date:"d M Y" }}</span>
+                  </div>
+                  <div class="booking-details">
+                    <div class="service-info">
+                      <span class="service-name">{{ booking.ServiceId.ServiceName }}</span>
+                      <span class="service-price">₹{{ booking.BillAmount }}</span>
+                    </div>
+                    <div class="booking-time">
+                      <i class="far fa-clock"></i>
+                      {{ booking.TimeSlote }}
+                    </div>
+                    <div class="booking-status {{ booking.Status|lower }}">
+                      {{ booking.Status }}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% else %}
+            <p class="no-bookings">No bookings found</p>
+          {% endif %}
         </div>
       </div>
     </div>

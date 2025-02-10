@@ -110,7 +110,7 @@
           <p class="lead">
             Discover top-rated salons and book your appointment instantly
           </p>
-          <form action="" method="post">
+          <!-- <form action="" method="post"> -->
             {% csrf_token %}
 
             <div class="search-box">
@@ -136,7 +136,7 @@
                 </div>
               </div>
             </div>
-          </form>
+          <!-- </form> -->
         </div>
       </div>
     </section>
@@ -256,6 +256,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       async function getCurrentLocation() {
+        
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             async function (position) {
@@ -285,13 +286,12 @@
                   data.address.suburb ||
                   data.address.road;
 
-                // console.log("City:", city);
-                // console.log("Area:", area);
-                // console.log("State:", state);
+                console.log("City:", city);
+                console.log("Area:", area);
+                console.log("State:", state);
+                alert("city")
 
-                document.getElementById(
-                  "areaSelect"
-                ).innerHTML = `<option value="${area}">${area}</option>`;
+                document.getElementById("areaSelect").innerHTML = `<option value="${area}">${area}</option>`;
               } catch (error) {
                 console.error("Error fetching location data:", error);
               }

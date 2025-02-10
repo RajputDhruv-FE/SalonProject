@@ -1,4 +1,3 @@
-
         :root {
             --primary-color: #D4AF37;
             --secondary-color: #fff;
@@ -174,5 +173,83 @@
             .action-buttons {
                 justify-content: center;
             }
+        }
+
+        .bookings-card {
+            margin-top: 20px;
+        }
+
+        .bookings-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .booking-item {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .booking-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .customer-name {
+            font-weight: 600;
+        }
+
+        .booking-date {
+            color: #666;
+        }
+
+        .booking-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .service-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .service-name {
+            font-weight: 500;
+        }
+
+        .service-price {
+            color: #666;
+        }
+
+        .booking-time {
+            color: #666;
+        }
+
+        .booking-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .booking-status.confirmed {
+            background-color: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .booking-status.completed {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .booking-status.cancelled {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+
+        .no-bookings {
+            text-align: center;
+            color: #666;
+            padding: 20px;
         }
     

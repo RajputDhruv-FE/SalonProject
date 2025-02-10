@@ -151,7 +151,7 @@ select:focus {
   padding: 2rem 0;
 }
 
-.salon-card {
+.salon-grid .salon-card {
   background: #1a1a1a;
   border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);

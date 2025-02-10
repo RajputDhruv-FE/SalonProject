@@ -56,9 +56,9 @@ class ImageMst(models.Model):
     SalonId= models.ForeignKey(SalonMst, on_delete=models.CASCADE)
     Img = models.ImageField(default='default.jpg')
 
-class BookingMst(models.Model):
-    BookingDate = models.DateTimeField()
-    BookingTime = models.TimeField()
+class SlotBookingMst(models.Model):
+    BookingDate = models.DateField()
+    TimeSlote = models.CharField(max_length=20)
     ServiceId = models.ForeignKey(SelectedServicemsMst, on_delete=models.CASCADE)
     SalonId = models.ForeignKey(SalonMst, on_delete=models.CASCADE)
     UserId = models.ForeignKey(UserMst, on_delete=models.CASCADE)

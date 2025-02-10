@@ -15,7 +15,7 @@ urlpatterns = [
 
     #user urls 
     path('UserProfile', views.UserProfile, name="UserProfile"),
-    path('BookinTransaction', views.BookinTransaction, name="BookinTransaction"),
+    path('BookinTransaction/<int:id>', views.BookinTransaction, name="BookinTransaction"),
 
     #service urls 
     path("ServiceTrans", views.ServiceTrans, name="ServiceTrans"),
@@ -39,7 +39,7 @@ urlpatterns = [
     path("SalonTrans",views.SalonTrans, name="SalonTrans"),
     path("SalonDetails/<int:id>",views.SalonDetails, name="SalonDetails"),
     path("upload_images",views.upload_images, name="upload_images"),
-    path("ShowSlots",views.ShowSlots, name="ShowSlots"),
+    path("ShowSlots/<int:id>",views.ShowSlots, name="ShowSlots"),
     
 
 

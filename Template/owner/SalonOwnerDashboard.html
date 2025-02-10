@@ -202,10 +202,13 @@
           <i class="fas fa-user"></i>
           Profile
         </a>
+        {% if not salon.Name %}
         <a href="{% url 'SalonTrans' %}" class="menu-item">
           <i class="fas fa-store"></i>
           Salon Registration
         </a>
+        {% endif %}
+       
         <a href="{% url 'SelectServices' %}" class="menu-item">
           <i class="fas fa-cut"></i>
           Services
