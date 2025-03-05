@@ -1,4 +1,5 @@
-{% load static %} {% include 'owner/SalonOwnerDashboard.html' %}
+{% load static %}
+{% include 'owner/SalonOwnerDashboard.html' %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -24,6 +25,17 @@
         }
       };
     </script>
+    <style>
+      .select-date {
+        width: 30%;
+        color: #fff;
+        background-color: transparent;
+        border-radius: 10px;
+        outline: none;
+        border: 1px solid gray;
+        padding: 10px;
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -107,39 +119,46 @@
               >
             </div>
           </div>
-
-        
-          
         </div>
         <div class="detail-card bookings-card">
           <h3>Recent Bookings</h3>
+
+          <form action="">
+
+          <input type="date" name="date" class="select-date"  />
+          </form>
           {% if bookings %}
-            <div class="bookings-list">
-              {% for booking in bookings %}
-                <div class="booking-item">
-                  <div class="booking-header">
-                    <i class="fas fa-user"></i>
-                    <span class="customer-name">{{ booking.UserId.Name }}</span>
-                    <span class="booking-date">{{ booking.BookingDate|date:"d M Y" }}</span>
-                  </div>
-                  <div class="booking-details">
-                    <div class="service-info">
-                      <span class="service-name">{{ booking.ServiceId.ServiceName }}</span>
-                      <span class="service-price">₹{{ booking.BillAmount }}</span>
-                    </div>
-                    <div class="booking-time">
-                      <i class="far fa-clock"></i>
-                      {{ booking.TimeSlote }}
-                    </div>
-                    <div class="booking-status {{ booking.Status|lower }}">
-                      {{ booking.Status }}
-                    </div>
-                  </div>
+          <div class="bookings-list">
+            {% for booking in bookings %}
+            <div class="booking-item">
+              <div class="booking-header">
+                <span class="customer-name"
+                  ><i class="fas fa-user"></i>{{ booking.UserId.Name }}</span
+                >
+                <span class="booking-date"
+                  >{{ booking.BookingDate|date:"d M Y" }}</span
+                >
+              </div>
+              <div class="booking-details">
+                <div class="service-info">
+                  <span class="service-name"
+                    >{{ booking.ServiceId.ServiceName }}</span
+                  >
+                  <span class="service-price">₹{{ booking.BillAmount }}</span>
                 </div>
-              {% endfor %}
+                <div class="booking-time">
+                  <i class="far fa-clock"></i>
+                  {{ booking.TimeSlote }}
+                </div>
+                <div class="booking-status {{ booking.Status|lower }}">
+                  {{ booking.Status }}
+                </div>
+              </div>
             </div>
+            {% endfor %}
+          </div>
           {% else %}
-            <p class="no-bookings">No bookings found</p>
+          <p class="no-bookings">No bookings found</p>
           {% endif %}
         </div>
       </div>
