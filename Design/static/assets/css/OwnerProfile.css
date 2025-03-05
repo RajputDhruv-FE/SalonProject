@@ -82,6 +82,7 @@ body {
 
 .btn-primary {
   background: var(--primary-color);
+  text-decoration: none;
   color: #121212;
 }
 
@@ -306,3 +307,28 @@ body {
     padding: 20px;
     transition: all 0.3s ease;
   }
+  .verify-btn {
+    background-color: #D4AF37;
+    color: #1a1a1a;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.verify-btn:hover {
+    background-color: #FFD700;
+    transform: translateY(-1px);
+}
+.verify-form input[type="radio"] {
+  margin-right: 5px;
+  accent-color: #D4AF37;
+}
+
+.verify-form label {
+  color: #FFF;
+  margin-right: 15px;
+}

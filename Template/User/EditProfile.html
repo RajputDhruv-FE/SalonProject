@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      body {
+          background-color: #121212;
+          font-family: 'Poppins', sans-serif;
+          color: #fff;
+          margin: 0;
+          padding: 20px;
+          min-height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+      }
+
+      .edit-form-container {
+          background: #1a1a1a;
+          padding: 40px;
+          border-radius: 15px;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+          max-width: 600px;
+          width: 90%;
+          border: 1px solid rgba(212, 175, 55, 0.1);
+      }
+
+      h2 {
+          color: #d4af37;
+          margin-bottom: 30px;
+          text-align: center;
+          font-size: 24px;
+      }
+
+      form {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      }
+
+      p {
+          width: 100%;
+      }
+
+      label {
+          color: #d4af37;
+          display: block;
+          margin-bottom: 8px;
+          font-weight: 500;
+      }
+
+      input, select, textarea {
+          width: 100%;
+          padding: 12px;
+          background: #242424;
+          border: 2px solid rgba(212, 175, 55, 0.3);
+          border-radius: 8px;
+          color: #fff;
+          font-family: 'Poppins', sans-serif;
+          font-size: 14px;
+          transition: all 0.3s ease;
+      }
+
+      input:focus, select:focus, textarea:focus {
+          outline: none;
+          border-color: #d4af37;
+          box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+      }
+
+      input[type="file"] {
+          width: 100%;
+          
+      }
+
+      button[type="submit"] {
+          background-color: #d4af37;
+          color: #121212;
+          padding: 14px 28px;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 16px;
+          transition: all 0.3s ease;
+          margin-top: 10px;
+          width: 100%;
+      }
+
+      button[type="submit"]:hover {
+          background-color: #c5a028;
+          transform: translateY(-2px);
+      }
+
+      /* Error messages styling */
+      .errorlist {
+          color: #ff4444;
+          list-style: none;
+          padding: 0;
+          margin: 5px 0 0;
+          font-size: 14px;
+      }
+
+      /* Help text styling */
+      .helptext {
+          color: #888;
+          font-size: 12px;
+          margin-top: 5px;
+          display: block;
+      }
+
+      @media (max-width: 768px) {
+          .edit-form-container {
+              padding: 20px;
+          }
+
+          button[type="submit"] {
+              padding: 12px 24px;
+          }
+      }
+     .back-btn{
+       margin: 1rem auto;
+          background-color: #d4af37;
+          color: #121212;
+          padding: 14px 28px;
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          font-weight: 600;
+          font-size: 16px;
+          width: 50%;
+          text-align: center;
+          text-decoration: none;
+          display: inline-block;
+      }
+      .back-btn:hover {
+          background-color: #c5a028;
+          
+     }
+  </style>
+</head>
+<body>
+  <div class="edit-form-container">
+    <h2>Edit Profile</h2>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Save Changes</button>
+        <a href="{% url 'UserProfile' %}" class="back-btn">Go Back To Profile</a>
+      </form>
+</div>
+</body>
+</html>

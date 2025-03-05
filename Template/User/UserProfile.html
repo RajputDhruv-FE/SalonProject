@@ -42,13 +42,17 @@
           <i class="fas fa-user"></i>
           Profile
         </a>
-        <a href="#" class="menu-item">
+        <a href="{% url 'BookingHistory' %}" class="menu-item">
           <i class="fas fa-history"></i>
           Booking History
         </a>
         <a href="{% url 'ChangePassword' %}" class="menu-item">
           <i class="fas fa-lock"></i>
           Change Password
+        </a>
+        <a href="{% url 'Editprofile' %}" class="menu-item logout-btn">
+          <i class="fas fa-pen"></i>
+          Edit Profile
         </a>
         <a href="{% url 'Logout' %}" class="menu-item logout-btn">
           <i class="fas fa-sign-out-alt"></i>
@@ -90,17 +94,17 @@
             <div class="salon-info">
               <h3 class="salon-name">{{ salon.Name }}</h3>
               <div class="salon-details">
-                <i class="far fa-clock"></i> Opens 8:00 AM
+                <i class="far fa-clock"></i> Opens {{salon.OpenTime}}
                 <i class="fas fa-phone"></i> {{ salon.Owner.PhoneNumber }}
               </div>
-              <div class="salon-rating">
+              <!-- <div class="salon-rating">
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star"></i>
                 <i class="fas fa-star-half-alt"></i>
                 <span class="salon-reviews">(189 reviews)</span>
-              </div>
+              </div> -->
               <div class="salon-services">
                 {% for service in services %}
                 <span class="service-tag">Makeup</span>

@@ -181,6 +181,15 @@
         }
       }
     </style>
+     <script>
+      // On page load, display the alert box if a message exists
+      window.onload = function () {
+        const serverMessage = "{{ message|escapejs }}"; // Safely render the message from Django
+        if (serverMessage) {
+          alert(serverMessage); // Display the message in an alert box
+        }
+      };
+    </script>
   </head>
   <body>
     <h1>Select Services</h1>

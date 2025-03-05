@@ -63,6 +63,7 @@ class SlotBookingMst(models.Model):
     SalonId = models.ForeignKey(SalonMst, on_delete=models.CASCADE)
     UserId = models.ForeignKey(UserMst, on_delete=models.CASCADE)
     BillAmount = models.IntegerField()
+    Status = models.CharField(max_length=10,default='Pending')
 
 
 

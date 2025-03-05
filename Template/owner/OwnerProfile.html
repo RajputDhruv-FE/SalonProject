@@ -1,5 +1,4 @@
-{% load static %}
-{% include 'owner/SalonOwnerDashboard.html' %}
+{% load static %} {% include 'owner/SalonOwnerDashboard.html' %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -78,8 +77,9 @@
           </div>
 
           <div class="action-buttons">
-            <button class="btn btn-primary">Edit Profile</button>
-            <button class="btn btn-outline">Share Profile</button>
+            <a href="{% url 'Editsalon' salon.id  %}" class="btn btn-primary">Edit Salon Profile</a>
+    
+            
           </div>
         </div>
 
@@ -110,7 +110,7 @@
             </div>
             <div class="detail-item">
               <span class="detail-label">Address</span>
-              <span class="detail-value">{{ salon.Area.AreaName }}</span>
+              <span class="detail-value"> {{salon.Location}},{{ salon.Area.AreaName }} </span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Business Hours</span>
@@ -123,9 +123,15 @@
         <div class="detail-card bookings-card">
           <h3>Recent Bookings</h3>
 
-          <form action="">
-
-          <input type="date" name="date" class="select-date"  />
+          <form action="" method="post">
+            {% csrf_token %}
+            <input type="date" name="date" class="select-date" />
+            <input
+              type="submit"
+              name="submit-btn"
+              value="Search"
+              class="btn btn-primary"
+            />
           </form>
           {% if bookings %}
           <div class="bookings-list">
@@ -153,6 +159,16 @@
                 <div class="booking-status {{ booking.Status|lower }}">
                   {{ booking.Status }}
                 </div>
+              </div>
+              <div>
+                <form action="{% url 'accept_appointment' booking.id %}" method="POST" class="verify-form">
+                  {% csrf_token %}
+                  <input type="radio" name="status" value="Accepted" id="verified{{booking.id}}">
+                  <label for="verified{{booking.id}}">Accept</label>
+                  <input type="radio" name="status" value="Rejected" id="rejected{{booking.id}}"> 
+                  <label for="rejected{{booking.id}}">Reject</label>
+                  <button type="submit" class="verify-btn">Submit</button>
+                </form>
               </div>
             </div>
             {% endfor %}

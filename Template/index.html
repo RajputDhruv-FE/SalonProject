@@ -45,9 +45,9 @@
           id="navbarNav"
         >
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">About Us</a></li>
-            <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+            <li class="nav-item"><a class="nav-link" href="#main">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="#aboutus">About Us</a></li>
+            <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
             <li class="nav-item">
               <a class="nav-link" href="{% url 'Login' %}">Login</a>
             </li>
@@ -60,7 +60,7 @@
     </nav>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="main">
       <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
@@ -113,7 +113,7 @@
           <!-- <form action="" method="post"> -->
             {% csrf_token %}
 
-            <div class="search-box">
+            <!-- <div class="search-box">
               <div class="row">
                 <div class="col">
                   <select name="area" class="form-control" id="areaSelect">
@@ -134,7 +134,7 @@
                     <i class="fas fa-location-arrow"></i>
                   </button>
                 </div>
-              </div>
+              </div> -->
             </div>
           <!-- </form> -->
         </div>
@@ -166,18 +166,14 @@
                     {{salon.Owner.PhoneNumber}}</span
                   >
                 </div>
-                <div class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <span>(189 reviews)</span>
-                </div>
+                <ul>
+                  <li>{{ service.ServiceName.Name }} - ₹{{ service.Price }}</li>
+                </ul>
                 <div class="salon-services">
-                  <span class="badge bg-light text-dark">Makeup</span>
-                  <span class="badge bg-light text-dark">Facial</span>
-                  <span class="badge bg-light text-dark">Massage</span>
+                  {% for service in salon.selectedservicemsmst_set.all %}
+                  <span class="badge bg-light text-dark">{{ service.ServiceName }}</span>
+                  {% endfor %}
+                  
                 </div>
                 <a
                   href="{% url 'SalonDetails' salon.id %}"
@@ -189,6 +185,69 @@
             </div>
           </div>
           {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section class="about-section py-5" id="aboutus">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-6 mb-4 mb-lg-0">
+            <div class="about-image">
+              <img 
+                src="https://images.unsplash.com/photo-1560066984-138dadb4c035?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
+                alt="About Hair Harmony" 
+                class="img-fluid rounded-3 shadow"
+              />
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="about-content">
+              <h2 class="section-title mb-4">About Hair Harmony</h2>
+              <p class="lead mb-4">
+                Your trusted platform for discovering and booking premium salon services.
+              </p>
+              <div class="about-features">
+                <div class="feature mb-3">
+                  <i class="fas fa-check-circle text-primary me-2"></i>
+                  <span>Curated selection of top-rated salons</span>
+                </div>
+                <div class="feature mb-3">
+                  <i class="fas fa-check-circle text-primary me-2"></i>
+                  <span>Easy and secure online booking</span>
+                </div>
+                <div class="feature mb-3">
+                  <i class="fas fa-check-circle text-primary me-2"></i>
+                  <span>Real customer reviews and ratings</span>
+                </div>
+                <div class="feature mb-4">
+                  <i class="fas fa-check-circle text-primary me-2"></i>
+                  <span>Professional and verified salon partners</span>
+                </div>
+              </div>
+              <div class="stats row g-4 text-center">
+                <div class="col-4">
+                  <div class="stat-box p-3 rounded-3">
+                    <h3 class="mb-2">500+</h3>
+                    <p class="mb-0">Salons</p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="stat-box p-3 rounded-3">
+                    <h3 class="mb-2">10k+</h3>
+                    <p class="mb-0">Users</p>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="stat-box p-3 rounded-3">
+                    <h3 class="mb-2">4.8</h3>
+                    <p class="mb-0">Rating</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -226,6 +285,77 @@
       </div>
     </section>
 
+    <!-- Contact Section -->
+    <section class="contact-section py-5" id="contact">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-10">
+            <div class="contact-wrapper bg-white rounded-3 shadow p-4">
+              <div class="row">
+                <div class="col-lg-5">
+                  <div class="contact-info p-4">
+                    <h2 class="section-title mb-4">Contact Us</h2>
+                    <p class="text-muted mb-4">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+                    
+                    <div class="contact-details">
+                      <div class="d-flex mb-3">
+                        <i class="fas fa-map-marker-alt text-primary me-3 mt-1"></i>
+                        <div>
+                          <h5 class="mb-1">Address</h5>
+                          <p class="mb-0">123 Salon Street, Beauty City, ST 12345</p>
+                        </div>
+                      </div>
+                      
+                      <div class="d-flex mb-3">
+                        <i class="fas fa-phone-alt text-primary me-3 mt-1"></i>
+                        <div>
+                          <h5 class="mb-1">Phone</h5>
+                          <p class="mb-0">+1 234 567 8900</p>
+                        </div>
+                      </div>
+                      
+                      <div class="d-flex">
+                        <i class="fas fa-envelope text-primary me-3 mt-1"></i>
+                        <div>
+                          <h5 class="mb-1">Email</h5>
+                          <p class="mb-0">salonproject01@gmail.com</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div class="col-lg-7">
+                  <form class="contact-form p-4">
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <input type="text" class="form-control" placeholder="Your Name" required>
+                      </div>
+                      <div class="col-md-6">
+                        <input type="email" class="form-control" placeholder="Your Email" required>
+                      </div>
+                      <div class="col-12">
+                        <input type="text" class="form-control" placeholder="Subject" required>
+                      </div>
+                      <div class="col-12">
+                        <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                      </div>
+                      <div class="col-12">
+                        <button type="submit" class="btn btn-primary px-4 py-2">
+                          Send Message
+                          <i class="fas fa-paper-plane ms-2"></i>
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Featured Salons -->
 
     <!-- Footer -->
@@ -247,7 +377,7 @@
         </div>
         <hr />
         <div class="text-center">
-          <p>&copy; 2024 GlamBook. All rights reserved.</p>
+          <p>&copy; 2024 Hair Harmony. All rights reserved.</p>
         </div>
       </div>
     </footer>

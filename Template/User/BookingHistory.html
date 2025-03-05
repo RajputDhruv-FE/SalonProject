@@ -1,0 +1,253 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Profile - GlamBook</title>
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    />
+    <link rel="stylesheet" href="{% static 'assets/css/UserProfile.css' %}" />
+
+    <style>
+      .booking-history {
+        padding: 20px;
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .booking-card {
+        background: #1a1a1a;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 1px solid rgba(212, 175, 55, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .booking-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        border-color: rgba(212, 175, 55, 0.3);
+      }
+
+      .booking-info {
+        flex: 1;
+      }
+
+      .booking-info > div {
+        margin-bottom: 8px;
+        color: #fff;
+        font-size: 0.95rem;
+      }
+
+      .booking-date,
+      .booking-time {
+        color: #d4af37;
+        font-weight: 500;
+      }
+
+      .booking-status {
+        display: inline-block;
+        padding: 5px 12px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        background-color: rgba(46, 125, 50, 0.2);
+        color: #4caf50;
+      }
+
+      .booking-actions {
+        margin-left: 20px;
+      }
+
+      .btn {
+        background-color: #d4af37;
+        color: #121212;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+      }
+
+      .btn:hover {
+        background-color: #c5a028;
+        transform: translateY(-2px);
+      }
+
+      h1 {
+        color: #d4af37;
+        margin-bottom: 30px;
+        font-size: 2rem;
+        font-weight: 600;
+        text-align: center;
+      }
+
+      @media (max-width: 768px) {
+        .booking-card {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .booking-actions {
+          margin-left: 0;
+          margin-top: 15px;
+          width: 100%;
+        }
+
+        .btn {
+          width: 100%;
+        }
+
+        .booking-info > div {
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+    <script>
+       window.onload = function () {
+        const serverMessage = "{{ message|escapejs }}"; // Safely render the message from Django
+        if (serverMessage) {
+          alert(serverMessage); // Display the message in an alert box
+        }
+      };
+    </script>
+  </head>
+  <body>
+    <!-- Sidebar Toggle Button (visible on mobile) -->
+    <button class="menu-toggle" id="menuToggle">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <img
+          src="{{ user.Img.url }}"
+          alt="Profile Picture"
+          class="sidebar-user-pic"
+        />
+        <div class="sidebar-username">{{ user.Name }}</div>
+        <div class="sidebar-email">{{ user.Email }}</div>
+      </div>
+
+      <div class="sidebar-menu">
+        <a href="{% url 'UserProfile' %}" class="menu-item">
+          <i class="fas fa-user"></i>
+          Profile
+        </a>
+        <a href="{% url 'BookingHistory' %}" class="menu-item active">
+          <i class="fas fa-history"></i>
+          Booking History
+        </a>
+        <a href="{% url 'ChangePassword' %}" class="menu-item">
+          <i class="fas fa-lock"></i>
+          Change Password
+        </a>
+        <a href="{% url 'Editprofile' %}" class="menu-item logout-btn">
+          <i class="fas fa-pen"></i>
+          Edit Profile
+        </a>
+        <a href="{% url 'Logout' %}" class="menu-item logout-btn">
+          <i class="fas fa-sign-out-alt"></i>
+          Logout
+        </a>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <h1>Booking History</h1>
+      <div class="booking-history">
+        {% for booking in bookings %}
+        {% if booking.Status != "Cancelled" %}
+        
+        <div class="booking-card">
+          <div class="booking-info">
+            <div class="booking-date">
+              <i class="fas fa-calendar-week"></i> : {{booking.BookingDate}}
+            </div>
+            <div class="booking-time">
+              <i class="fas fa-clock"></i> : {{booking.TimeSlote}}
+            </div>
+            <div class="booking-service">
+              <i class="fas fa-cut"></i> :
+              {{booking.ServiceId.ServiceName.ServiceName}}
+            </div>
+            <div class="booking-salon">
+              <i class="fas fa-store"></i> : {{booking.SalonId.Name}}
+            </div>
+            <div class="booking-status">Status : {{ booking.Status}}</div>
+          </div>
+          <div class="more-details">
+            <div class="booking-price">₹{{booking.BillAmount}}</div>
+            {% if booking.Status == "Pending" %}
+            <div class="booking-actions">
+              <form action="{% url 'cancel_appointment' booking.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Cancel</button>
+              </form>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <script>
+      // Sidebar Toggle Functionality
+      const menuToggle = document.getElementById("menuToggle");
+      const sidebar = document.getElementById("sidebar");
+      const sidebarOverlay = document.getElementById("sidebarOverlay");
+      const mainContent = document.querySelector(".main-content");
+
+      function toggleSidebar() {
+        sidebar.classList.toggle("active");
+        sidebarOverlay.classList.toggle("active");
+        document.body.style.overflow = sidebar.classList.contains("active")
+          ? "hidden"
+          : "";
+      }
+
+      menuToggle.addEventListener("click", (e) => {
+        e.stopPropagation();
+        toggleSidebar();
+      });
+
+      sidebarOverlay.addEventListener("click", toggleSidebar);
+
+      // Close sidebar when window is resized to desktop size
+      window.addEventListener("resize", () => {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove("active");
+          sidebarOverlay.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Prevent zoom on mobile devices
+      document.addEventListener("gesturestart", function (e) {
+        e.preventDefault();
+      });
+    </script>
+  </body>
+</html>

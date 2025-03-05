@@ -350,18 +350,6 @@
           Manage Salon Services
         </a>
 
-        <a href="#" class="menu-item">
-          <i class="fas fa-users"></i>
-          Manage Users
-        </a>
-        <a href="#" class="menu-item">
-          <i class="fas fa-calendar-check"></i>
-          Bookings
-        </a>
-        <a href="#" class="menu-item">
-          <i class="fas fa-cog"></i>
-          Settings
-        </a>
         <a href="{% url 'ChangePassword' %}" class="menu-item">
           <i class="fas fa-sign-out-alt"></i>
           Change Password
@@ -394,7 +382,7 @@
       <div class="dashboard-cards">
         <div class="card stat-card">
           <div class="stat-info">
-            <h3>{{ salonrequest|length }}</h3>
+            <h3>{{ salons|length }}</h3>
             <p>Total Salons</p>
           </div>
           <div class="stat-icon purple">
@@ -414,7 +402,7 @@
 
         <div class="card stat-card">
           <div class="stat-info">
-            <h3>485</h3>
+            <h3>{{bookings|length}}</h3>
             <p>Bookings Today</p>
           </div>
           <div class="stat-icon blue">
@@ -422,15 +410,7 @@
           </div>
         </div>
 
-        <div class="card stat-card">
-          <div class="stat-info">
-            <h3>₹12,856</h3>
-            <p>Revenue</p>
-          </div>
-          <div class="stat-icon green">
-            <i class="fas fa-rupee-sign"></i>
-          </div>
-        </div>
+       
       </div>
     </div>
   </body>

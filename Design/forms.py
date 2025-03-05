@@ -19,6 +19,20 @@ class AreaForm(forms.ModelForm):
 class UserForm(forms.ModelForm):
     choices = [('Owner','Owner'), ('User', 'User')]
     Usertype = forms.ChoiceField(choices=choices,widget=forms.Select(attrs={'class':'form-control'}))
+    Password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'form-control','pattern': '^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]{8,}$','title':'Password must contain at least 8 characters, including UPPER/lowercase , special symbols and numbers'}))
+    # PhoneNumber = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}),min_length=10,max_length=10,)
+    PhoneNumber = forms.CharField(
+    widget=forms.TextInput(attrs={
+        'class': 'form-control',
+        'minlength': '10',
+        'maxlength': '10',
+        'pattern': '[0-9]{10}',
+        'inputmode': 'numeric',
+        'placeholder': 'Enter 10-digit phone number',
+        'title':'Please enter a valid 10-digit phone number'
+    })
+)
+
     class Meta:
         model=UserMst
         fields=['Name','UserName','Email','PhoneNumber','Password','Usertype','Img']
@@ -70,4 +84,34 @@ class BookingForm(forms.ModelForm):
         model = SlotBookingMst
       
         fields = ['BookingDate','BookingTime','ServiceId']
+
+
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserMst
+        fields = ['Name', 'UserName', 'Email', 'PhoneNumber', 'Img']
+
+    def clean_PhoneNumber(self):
+        phone = self.cleaned_data.get('PhoneNumber')
+        if not phone.isdigit() or len(phone) != 10:
+            raise forms.ValidationError("Enter a valid 10-digit phone number.")
+        return phone
+    
+from django import forms
+from .models import SalonMst  # Import your model
+
+class EditSalonForm(forms.ModelForm):
+    class Meta:
+        model = SalonMst
+        fields = [
+            'Name', 'Location', 'Img', 
+            'NumberOfSeats', 'Area', 'City', 'OpenTime', 'CloseTime', 'Type'
+        ]
+
+    def clean_NumberOfSeats(self):
+        seats = self.cleaned_data.get('NumberOfSeats')
+        if seats <= 0:
+            raise forms.ValidationError("Number of seats must be greater than zero.")
+        return seats
 
