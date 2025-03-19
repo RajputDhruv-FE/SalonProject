@@ -32,6 +32,7 @@ class UserMst(models.Model):
     Usertype= models.CharField(max_length=10)
     Status= models.CharField(max_length=10)
     Img=models.ImageField(default='default.jpg') 
+    password_reset_token = models.CharField(max_length=255, blank=True, null=True)  # Store reset token
     
 class SalonMst(models.Model):
     Name = models.CharField(max_length=20)

@@ -324,10 +324,29 @@
         font-size: 0.8rem;
         white-space: nowrap;
       }
+      .reason-field{
+        
+        font-size: 1.2rem;
+        padding: 0.5rem;
+      }
+      .reject-radio:checked + .reason-container{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        gap: 10px;
+
+      }
+      .reason-container{
+        display: none;
+        margin: 1rem 0;
+      
+      }
 
       /* Add these new styles for the salon requests table */
       
     </style>
+   
      <link rel="stylesheet" href="{% static 'assets/css/AdminDashboard.css' %}" />
   </head>
   <body>
@@ -447,7 +466,8 @@
                 <form action="{% url 'UpdateSalonStatus' request.id %}" method="POST" class="verify-form">
                   {% csrf_token %}
                   <input type="radio" name="status" value="verified">Verify
-                  <input type="radio" name="status" value="rejected">Reject
+                  <input type="radio" name="status" value="rejected" class="reject-radio">Reject
+                  <div class="reason-container"><span>Write The Reason Here:</span><textarea name="reason" placeholder="Write the Reason Here" id="" class="reason-field"></textarea></div>
                   <button type="submit" class="verify-btn">Submit</button>
                 </form>
                 {% endif %}

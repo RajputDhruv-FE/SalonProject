@@ -9,6 +9,7 @@ from datetime import datetime, timedelta, date
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.utils.timezone import now, make_aware
+from django.utils.crypto import get_random_string
 
 def IndexView(request):
 
@@ -76,7 +77,12 @@ def UpdateSalonStatus(request,id):
     salondata = UserMst.objects.get(id = id)
     salondata.Status = status
     salondata.save()
-    SalonRequestAccept(salondata.Email,salondata.Name)
+    if status == "verified":
+        SalonRequestAccept(salondata.Email,salondata.Name)
+    else:
+        reason = request.POST['reason']
+        SalonRequestReject(salondata.Email,salondata.Name,reason)
+        
     return redirect('AdminDashboard')
 
 
@@ -279,18 +285,28 @@ def HandleChangePassword(request):
 
 def ForgetPassword(request):
     if request.method == 'POST':
-        email = request.POST['email']
-        Username = request.POST['username']
-        if UserMst.objects.filter(Q(Email = email) & Q(UserName = Username)).exists():
-            member = UserMst.objects.get(Email = email)
-            password = member.Password
-            content = {"message":password}
-            return render(request,'User/ForgetPassword.html',content)
+        
+        email = request.POST.get("email")
+
+        try:
+            user = UserMst.objects.get(Email=email)
+            send_password_reset_email(user)  # Send reset link
+                # messages.success(request, "Password reset email sent. Check your inbox.")
+        except UserMst.DoesNotExist:
+                # messages.error(request, "No account found with this email.")
+            return redirect("ForgetPassword")
+
+        return render(request,'User/ForgetPassword.html')
+        # email = request.POST['email']
+        # if UserMst.objects.filter(Q(Email = email) & Q(UserName = Username)).exists():
+        #     member = UserMst.objects.get(Email = email)
+        #     password = member.Password
+        #     content = {"message":password}
+        # send_password_reset_email("rajputdhruv443@gmail.com", 'dhruv')
     else:
 
         # send the email to the user for forgot password
-        send_password_reset_email("rajputdhruv443@gmail.com", 'dhruv')
-        return render(request,'User/ForgetPassword.html')
+        return render(request,'ForgetEmailForm.html')
     
 
 
@@ -440,8 +456,11 @@ def accept_appointment(request,id):
         user = UserMst.objects.get(id = booking.UserId.id)
         amount  = serviceobj.Price
         print(serviceobj,salon,user,amount)
-        send_appointment_confirmation_email(user.Email,user.Name,serviceobj.ServiceName,date,booking.TimeSlote,salon.Location,amount)
-
+        if status == "Accepted":
+            send_appointment_confirmation_email(user.Email,user.Name,serviceobj.ServiceName,date,booking.TimeSlote,salon.Location,amount)
+        else:
+            reason = request.POST['reason']
+            send_appointment_rejection_email(user.Email,user.Name,serviceobj.ServiceName,date,booking.TimeSlote,salon.Location,reason)
         return redirect(OwnerProfile)
 
 def cancel_appointment(request, id):
@@ -595,6 +614,46 @@ www.hariharmony.com | Contact Support
         print("Email sent successfully")
     return redirect('IndexView')
 
+def send_appointment_rejection_email(user_email, user_name, services, date, time, location, owner_message):
+    subject = "Your Salon Appointment Request has been Declined – Hari Harmony"
+
+    message = f"""Dear {user_name},
+
+Thank you for choosing Hari Harmony for your salon needs.
+
+We regret to inform you that your **appointment request** for the following service(s) has been **declined** by the salon owner:
+
+📅 **Appointment Details:**
+- **Service(s) Requested:** {services}
+- **Date & Time:** {date} at {time}
+- **Salon Location:** {location}
+
+📌 **Reason for Rejection:**
+{owner_message}
+
+We apologize for any inconvenience caused. If you wish to book another appointment, please visit our website:  
+🌐 [www.hariharmony.com](www.hariharmony.com)
+
+For further assistance, feel free to reach out to us at **support@hariharmony.com**.
+
+We appreciate your understanding.
+
+**Best regards,**  
+**The Hari Harmony Team**  
+📞 +91-XXXXXXXXXX  
+🌐 www.hariharmony.com  
+"""
+
+    email_from = settings.EMAIL_HOST_USER  # Sender email
+    recipient_list = [user_email]  # Recipient email
+    
+    try:
+        send_mail(subject, message, email_from, recipient_list)
+        print("Rejection email sent successfully")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+
+    return redirect('IndexView')
 
 def send_appointment_confirmation_email(user_email, user_name, services, date, time, location, total):
     subject = "Your Salon Appointment is Confirmed – Hari Harmony"
@@ -632,8 +691,40 @@ The Hari Harmony Team
         print("Email sent successfully")
     return redirect('IndexView')
 
+from django.contrib.auth.hashers import make_password
 
-def send_password_reset_email(user, token):
+def reset_password(request, token):
+    try:
+        user = UserMst.objects.get(password_reset_token=token)
+    except UserMst.DoesNotExist:
+        # messages.error(request, "Invalid or expired token.")
+        return redirect("ForgetPassword")
+
+    if request.method == "POST":
+        new_password = request.POST.get("new_password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            # messages.error(request, "Passwords do not match!")
+            return redirect(f"/reset_password/{token}/")
+
+        # Hash the new password and save it
+        user.Password = make_password(new_password)
+        user.password_reset_token = None  # Clear the token
+        user.save()
+
+        # messages.success(request, "Password has been reset. You can now log in.")
+        return redirect("login")
+
+    return render(request, "reset_password.html", {"token": token})
+
+
+def send_password_reset_email(user):
+    token = get_random_string(length=50)
+    
+    # Store the token in the database
+    user.password_reset_token = token
+    user.save()
     reset_link = f"http://127.0.0.1:8000/reset_password/{token}"  # Change to your actual domain
     
     # Render the HTML email template
@@ -644,12 +735,31 @@ def send_password_reset_email(user, token):
         subject="Reset Your Password",
         message=plain_message,  # Plain text version
         from_email= settings.EMAIL_HOST_USER,
-        recipient_list=[user],
+        recipient_list=[user.Email],
         html_message=html_message,  # HTML version
     )
 
+
+
 def reset_password(request, token):
-    return render(request, 'Forgetpass.html', {'token': token})
+
+    if request.method == "POST":
+        user = UserMst.objects.get(password_reset_token=token)
+        new_password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if new_password != confirm_password:
+            return redirect(f"/reset_password/{token}/")
+
+        # Hash the new password and save it
+        user.Password = new_password
+        user.password_reset_token = None  # Clear the token
+        user.save()
+        send_password_change_confirmation_email(user)
+        return redirect("Login")
+
+    return render(request, "ForgetPass.html", {"token": token})
+
 
 def SalonRequestAccept(email, owner_name):
     subject = 'Salon Registration Approved – Complete Your Salon Details'
@@ -683,3 +793,56 @@ Welcome to **Hair Harmony** – we’re excited to have you on board!
         print(f"Error sending email: {e}")
 
     return redirect('AdminDashboard')
+
+def send_password_change_confirmation_email(user):
+    subject = "Your Password Has Been Changed"
+    message = f"""
+    Hello {user.Name},
+
+    We want to let you know that your password has been successfully changed.
+
+    If you did not make this change, please reset your password immediately or contact our support team.
+
+    Thank you,
+    **Hair Harmony Team**  
+    """
+
+    send_mail(
+        subject=subject,
+        message=message,  # Plain text message
+        from_email=settings.EMAIL_HOST_USER,
+        recipient_list=[user.Email],
+    )
+
+
+def SalonRequestReject(email, owner_name, rejection_reason):
+    subject = 'Salon Registration Request Declined – Hair Harmony'
+    message = f"""Dear {owner_name},
+
+Thank you for your interest in registering your salon on **Hair Harmony**.  
+
+After careful review, we regret to inform you that your **salon registration request has been declined**.  
+
+### Reason for Rejection:  
+{rejection_reason}  
+
+If you believe this decision was made in error or you would like to discuss it further, please feel free to contact our support team.  
+
+We appreciate your understanding and encourage you to apply again in the future.  
+
+**Best regards,**  
+**Hair Harmony Team**  
+"""
+
+    email_from = settings.EMAIL_HOST_USER  # Sender email
+    recipient_list = [email]  # Set the recipient email dynamically
+
+    try:
+        send_mail(subject, message, email_from, recipient_list)
+        print("Rejection email sent successfully")
+    except Exception as e:
+        print(f"Error sending email: {e}")
+
+    return redirect('AdminDashboard')
+
+

@@ -131,9 +131,8 @@
         Please enter your new password.
       </p>
 
-      <form action="ForgetPassword" method="POST" class="forget-password-form" id="resetForm">
+      <form action="{% url 'reset_password' token %}" method="POST" class="forget-password-form" id="resetForm">
         {% csrf_token %}
-
         <div class="form-group">
           <label for="password">New Password</label>
           <input

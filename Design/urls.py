@@ -17,6 +17,7 @@ urlpatterns = [
 
     #user urls 
     path('UserProfile', views.UserProfile, name="UserProfile"),
+    
     path('BookinTransaction/<int:id>', views.BookinTransaction, name="BookinTransaction"),
     path('BookingHistory', views.BookingHistory, name="BookingHistory"),
     path('BookingHistory/<int:id>', views.cancel_appointment, name="cancel_appointment"),
@@ -62,6 +63,6 @@ urlpatterns = [
     #  path("CityDelete/<int:id>",views.CityDelect, name="CityDelete"),
 
     # path("AreaTable", views.AreaListTrans, name="AreaTable"),
- 
+ path("reset_password/<str:token>", views.reset_password, name="reset_password"),
 
 ]
